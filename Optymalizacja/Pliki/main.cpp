@@ -68,6 +68,8 @@ void lab0()
 
 void lab1()
 {
+	// ania test
+	int x = 12;
 
 }
 
