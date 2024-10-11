@@ -73,7 +73,8 @@ void lab1()
 
 void lab2()
 {
-
+	//Aneta test
+	int x = 2;
 }
 
 void lab3()
