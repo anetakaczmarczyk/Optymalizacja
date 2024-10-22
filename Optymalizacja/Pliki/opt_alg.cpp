@@ -50,7 +50,20 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 	try
 	{
 		solution Xopt;
+		int k = 0;
+		double phi = (1 + sqrt(5)) / 2;
+
+		// znalezienie liczby k
+		// while ()
+
 		//Tu wpisz kod funkcji
+		Xopt.fit_fun(ff, ud1, ud2);
+		Xopt.f_calls();
+		Xopt.x(0);
+		for (int i = 0; i < N; ++i) {
+			Xopt.x(i) = (b - a) * Xopt.x(i) + a;
+		}
+
 
 		return Xopt;
 	}
