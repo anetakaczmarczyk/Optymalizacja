@@ -41,3 +41,10 @@ matrix ff1(matrix x, matrix ud1, matrix ud2)
 	return y;
 }
 
+// jakas tam funkcja w wykladu do testowania fibonacciego
+matrix fibtest(matrix x, matrix ud1, matrix ud2)
+{
+	matrix y;
+	y = m2d(x) + 1 / pow(m2d(x), 2);
+	return y;
+}
