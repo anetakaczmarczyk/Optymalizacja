@@ -1,10 +1,10 @@
 /*********************************************
-Kod stanowi uzupe³nienie materia³ów do æwiczeñ
+Kod stanowi uzupeï¿½nienie materiaï¿½ï¿½w do ï¿½wiczeï¿½
 w ramach przedmiotu metody optymalizacji.
-Kod udostêpniony na licencji CC BY-SA 3.0
-Autor: dr in¿. £ukasz Sztangret
+Kod udostï¿½pniony na licencji CC BY-SA 3.0
+Autor: dr inï¿½. ï¿½ukasz Sztangret
 Katedra Informatyki Stosowanej i Modelowania
-Akademia Górniczo-Hutnicza
+Akademia Gï¿½rniczo-Hutnicza
 Data ostatniej modyfikacji: 19.09.2023
 *********************************************/
 
@@ -22,7 +22,7 @@ int main()
 {
 	try
 	{
-		lab0();
+		lab1();
 	}
 	catch (string EX_INFO)
 	{
@@ -68,9 +68,13 @@ void lab0()
 
 void lab1()
 {
-	// ania test
-	int x = 12;
-
+	// ania fib test
+	double a = 1;
+	double b = 2;
+	double epsilon = 0.01;
+	solution fibSol = fib(fibtest, a, b, epsilon);
+	std::cout << fibSol << std::endl;
+	solution::clear_calls();
 }
 
 void lab2()

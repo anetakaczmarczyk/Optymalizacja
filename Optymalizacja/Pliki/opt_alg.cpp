@@ -49,21 +49,48 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 {
 	try
 	{
-		solution Xopt;
-		int k = 0;
-		double phi = (1 + sqrt(5)) / 2;
+		// ustalenie końców początkowego przedziału poszukiwań
+		std::vector<double> phi;
+		phi.push_back(0);
+		phi.push_back(1);
 
-		// znalezienie liczby k
-		// while ()
-
-		//Tu wpisz kod funkcji
-		Xopt.fit_fun(ff, ud1, ud2);
-		Xopt.f_calls();
-		Xopt.x(0);
-		for (int i = 0; i < N; ++i) {
-			Xopt.x(i) = (b - a) * Xopt.x(i) + a;
+		// poszukiwanie najmniejszego k, dla ktorego phi_k > L/epsilon
+		int k = 1;
+		while (phi[k] <= (b - a) / epsilon){
+			phi.push_back(phi[k] + phi[k - 1]);
+			k++;
 		}
 
+		double a0 = a;
+		double b0 = b;
+		double c0 = b0 - phi[k-1] / phi[k] * (b0 - a0);
+		double d0 = a0 + b0 - c0;
+
+		solution c_sol, d_sol;	// jak sie chce miec wartosc funkcji w punkcie to trzeba uzyc klasy solution xd
+		for (int i = 0; i <= k - 3; ++i)
+		{
+			c_sol.x = c0;
+			c_sol.fit_fun(ff);	// to uzupelnia pole y w klasie solution
+
+			d_sol.x = d0;
+			d_sol.fit_fun(ff);
+
+			// redukowanie przedziału
+			if (c_sol.y < d_sol.y) {
+				b0 = d0;
+			}
+			else {
+				a0 = c0;
+			}
+
+			c0 = b0 - phi[k - i - 2] / phi[k - i - 1] * (b0 - a0);
+			d0 = a0 + b0 - c0;
+		}
+
+		// zwracanie rozwiazania
+		solution Xopt;
+		Xopt.x = c0;
+		Xopt.fit_fun(ff);
 
 		return Xopt;
 	}
