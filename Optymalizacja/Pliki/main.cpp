@@ -67,7 +67,11 @@ void lab0()
 }
 
 void lab1()
-{	//martynka expension test
+{
+	// solution do testow
+	solution test_opt;
+
+	//martynka expension test
 	double epsilon = 1e-18;
 	double d = 0.01;
 	int Nmax = 200;
@@ -90,6 +94,13 @@ void lab1()
 
 		// Zapis wyników do stringstream
 		test_ss << x0 << ";" << result[0] << ";" << result[1] << ";" << result[2] << ";\n";
+		solution::clear_calls();
+
+		// obliczanie minimum metoda fibonacciego
+		test_opt = fib(ff1, result[0], result[1], epsilon);
+		// zapis do stringa: x_min; y_min; f_calls;
+		test_ss << m2d(test_opt.x) << "; " << m2d(test_opt.y) << "; " << test_opt.f_calls << ";\n";
+		solution::clear_calls();
 
 		// Zwolnienie pamięci
 		delete[] result;
@@ -97,13 +108,12 @@ void lab1()
 	std::cout << "Wyniki testu ekspansji:\n";
 	std::cout << test_ss.str() << std::endl;
 
+	solution::clear_calls();
 
-	// ania fib test
-	double a = 1;
-	double b = 2;
-	epsilon = 0.01;
-	solution fibSol = fib(fibtest, a, b, epsilon);
-	std::cout << fibSol << std::endl;
+	// ania - fibonacci w przedziale [-100; 100]
+	test_opt = fib(ff1, -100 , 100 , epsilon);
+	std::cout << "Minimum metoda Fibonacci'ego:\n";
+	std::cout << test_opt << std::endl;
 	solution::clear_calls();
 }
 
