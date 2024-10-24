@@ -32,18 +32,74 @@ solution MC(matrix(*ff)(matrix, matrix, matrix), int N, matrix lb, matrix ub, do
 
 double* expansion(matrix(*ff)(matrix, matrix, matrix), double x0, double d, double alpha, int Nmax, matrix ud1, matrix ud2)
 {
-	try
-	{
-		double* p = new double[2]{ 0,0 };
-		//Tu wpisz kod funkcji
+    try
+    {
+        int i = 0;
+        solution xi_sol, xi_next_sol;
+        double xi, xi_next;
 
-		return p;
-	}
-	catch (string ex_info)
-	{
-		throw ("double* expansion(...):\n" + ex_info);
-	}
+        xi = x0;
+        xi_next = xi + d;
+
+        xi_sol.x = xi;
+        xi_sol.fit_fun(ff, ud1, ud2);
+
+        xi_next_sol.x = xi_next;
+        xi_next_sol.fit_fun(ff, ud1, ud2);
+
+
+        if (xi_next_sol.y == xi_sol.y)
+            return new double[3]{ xi, xi_next, (double)solution::f_calls };
+
+        if (xi_next_sol.y > xi_sol.y)
+        {
+            d = -d;
+            xi_next = xi + d;
+            xi_next_sol.x = xi_next;
+            xi_next_sol.fit_fun(ff, ud1, ud2);
+
+
+            if (xi_next_sol.y >= xi_sol.y)
+                return new double[3]{ xi_next, xi - d, (double)solution::f_calls };
+        }
+
+        solution::clear_calls();
+        double xi_prev{};
+        double f_xi = m2d(xi_sol.y);
+        do
+        {
+            if (solution::f_calls > Nmax)
+            {
+                xi_next_sol.flag = 0;
+                throw std::string("Maximum amount of f_calls reached!");
+            }
+
+            ++i;
+            xi_next = xi + pow(alpha, i) * d;
+
+            xi_next_sol.x = xi_next;
+            xi_next_sol.fit_fun(ff, ud1, ud2);
+
+            if (!(f_xi > xi_next_sol.y))
+                break;
+
+            xi_prev = xi;
+            xi = xi_next;
+            f_xi = m2d(xi_next_sol.y);
+
+        } while (true);
+
+        if (d > 0)
+            return new double[3]{ xi_prev, xi_next, (double)solution::f_calls };
+
+        return new double[3]{ xi_next, xi_prev, (double)solution::f_calls };
+    }
+    catch (const std::string& ex_info)
+    {
+        throw ("double* expansion(...):\n" + ex_info);
+    }
 }
+
 
 solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double epsilon, matrix ud1, matrix ud2)
 {

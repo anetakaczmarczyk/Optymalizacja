@@ -67,11 +67,41 @@ void lab0()
 }
 
 void lab1()
-{
+{	//martynka expension test
+	double epsilon = 1e-18;
+	double d = 0.01;
+	int Nmax = 200;
+	double alpha = 1.1;
+
+
+	// Generator losowania liczb
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> x0_dist(0.0, 100.0);
+
+	std::stringstream test_ss;
+
+	double* result=nullptr;
+
+	for (int i = 0; i < 100; ++i)
+	{
+		double x0 = x0_dist(gen);
+		result = expansion(ff1, x0, d, alpha, Nmax);
+
+		// Zapis wyników do stringstream
+		test_ss << x0 << ";" << result[0] << ";" << result[1] << ";" << result[2] << ";\n";
+
+		// Zwolnienie pamięci
+		delete[] result;
+	}
+	std::cout << "Wyniki testu ekspansji:\n";
+	std::cout << test_ss.str() << std::endl;
+
+
 	// ania fib test
 	double a = 1;
 	double b = 2;
-	double epsilon = 0.01;
+	epsilon = 0.01;
 	solution fibSol = fib(fibtest, a, b, epsilon);
 	std::cout << fibSol << std::endl;
 	solution::clear_calls();
