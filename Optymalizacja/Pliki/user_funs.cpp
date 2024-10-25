@@ -43,7 +43,7 @@ matrix ff1(matrix x, matrix ud1, matrix ud2)
 matrix f1R(matrix x , matrix ud1, matrix ud2){
     //dla tego nie uzywamy metody ekspansji
     matrix y;
-    matrix Y0=matrix(3,new double[]{5,1,20});
+    matrix Y0=matrix(3,new double[3]{5,1,20});
     matrix* Y= solve_ode(df1, 0,1,200,Y0,ud1,x);
     //df1 funkcja ktora zwraca rownanie rozniczkowe
     int n=get_len(Y[0]);
@@ -53,14 +53,64 @@ matrix f1R(matrix x , matrix ud1, matrix ud2){
             max=Y[1](i,2);
     }
     y=abs(max-50);
-    return y;
+	Y[0].~matrix();
+	Y[1].~matrix();
 
+    return y;
 }
 
-// jakas tam funkcja w wykladu do testowania fibonacciego
-matrix fibtest(matrix x, matrix ud1, matrix ud2)
-{
-	matrix y;
-	y = m2d(x) + 1 / pow(m2d(x), 2);
-	return y;
+matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
+	// wektor zmian po czasie
+	matrix dY(3,1);
+
+	// zmienne zadania
+	double Va = dY(0);
+	double Vb = dY(1);
+	double Tb = dY(2);
+
+	// dane z zadania
+	double Pa = ud1(0);
+	double Ta = ud1(1);
+	double Pb = ud1(2);
+	double Db = ud1(3);
+	double F_in = ud1(4);
+	double T_in = ud1(5);
+	double a = ud1(6);
+	double b = ud1(7);
+	double g = ud1(8);
+
+	double Da = ud2(1);	// to bedziemy optymalizowac
+
+	// obliczanie wylanego strumienia ze zbiornika A
+	double Fa_out{};
+	if (Va > 0.0)
+		Fa_out = a * b * Da * sqrt(2 * g * Va / Pa); // Va to nasz Y(0)
+
+	// obliczanie wylanego strumienia ze zbiornika B
+	double Fb_out{};
+	if (Vb > 0.0)
+		Fb_out = a * b * Db * sqrt(2 * g * Vb / Pb); // Vb to nasz Y(1)
+
+	// double dTb_dt = Fa_out/Vb * (Ta - Tb) + F_in/Vb * (T_in - Tb);	// Tb to nasz Y(2)
+
+	//Ustalanie zmiany obj�to�ci w zbiornku A
+	if (Y(0) + dY(0) < 0)
+		dY(0) = -Y(0); //Wylanie reszty je�li strumie� wi�kszy od obj�to�ci wody
+	else
+		dY(0) = -Fa_out; //Wylanie strumienia
+
+	//Ustalanie zmien obj�to�ci w zbiorniku B
+	if (Y(1) + dY(1) < 0)
+		dY(1) = -Y(1); //Wylanie reszty je�li strumie� wi�kszy od obj�to�ci wody
+	else
+		dY(1) = Fa_out + F_in - Fb_out; //Wylanie strumienia oraz wlanie wody z kranu i ze zbiornika A
+
+	//Ustalenie zmian temperatury w zbiorniku B
+	if (Vb > 0)
+		dY(2) = (F_in / Vb) * (T_in - Tb) + (Fa_out / Vb) * (Ta - Tb); //Formu�a je�li zbiornik B nie jest pusty
+	else
+		dY(2) = 0; //Pusty zbiornik B
+
+	//Zwracanie zmian po czasie
+	return dY;
 }

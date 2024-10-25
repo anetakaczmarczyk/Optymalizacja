@@ -2,10 +2,12 @@
 
 #include"ode_solver.h"
 
-matrix ff1(matrix, matrix = NAN, matrix = NAN);
+
 matrix ff0T(matrix, matrix = NAN, matrix = NAN);
 matrix ff0R(matrix, matrix = NAN, matrix = NAN);
 matrix df0(double, matrix, matrix = NAN, matrix = NAN);
 
-matrix fibtest(matrix, matrix = NAN, matrix = NAN); // sb zrobilam do testowania przyklad z wykladu, potem usune
-
+// lab 1
+matrix ff1(matrix, matrix = NAN, matrix = NAN);
+matrix f1R(matrix, matrix = NAN, matrix = NAN);
+matrix df1(double, matrix, matrix = NAN, matrix = NAN);
