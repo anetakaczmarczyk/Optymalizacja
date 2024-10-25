@@ -40,6 +40,22 @@ matrix ff1(matrix x, matrix ud1, matrix ud2)
 	y = -cos(0.1 * m2d(x)) * exp (-1.0 * pow((0.1 * m2d(x) - 2 * M_PI), 2)) + 0.002 * pow(0.1 * m2d(x), 2);
 	return y;
 }
+matrix f1R(matrix x , matrix ud1, matrix ud2){
+    //dla tego nie uzywamy metody ekspansji
+    matrix y;
+    matrix Y0=matrix(3,new double[]{5,1,20});
+    matrix* Y= solve_ode(df1, 0,1,200,Y0,ud1,x);
+    //df1 funkcja ktora zwraca rownanie rozniczkowe
+    int n=get_len(Y[0]);
+    double max=Y[1](0,2); //(0,2)? -> tak jest skonstruowana matrix
+    for(int i=0;i<n;i++){
+        if(max<Y[1](i,2))
+            max=Y[1](i,2);
+    }
+    y=abs(max-50);
+    return y;
+
+}
 
 // jakas tam funkcja w wykladu do testowania fibonacciego
 matrix fibtest(matrix x, matrix ud1, matrix ud2)
