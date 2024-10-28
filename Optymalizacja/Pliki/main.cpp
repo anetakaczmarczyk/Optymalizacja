@@ -114,6 +114,14 @@ void lab1()
 	test_opt = fib(ff1, -100 , 100 , epsilon);
 	std::cout << "Minimum metoda Fibonacci'ego:\n";
 	std::cout << test_opt << std::endl;
+
+	//aneta test
+
+	solution::clear_calls();
+
+	test_opt = lag(ff1, -100, 100, epsilon, 1e-30, Nmax);
+	std::cout << "Minimum metoda Lagrange'a:\n";
+	std::cout << test_opt << std::endl;
 	solution::clear_calls();
 
 	// problem rzeczywisty

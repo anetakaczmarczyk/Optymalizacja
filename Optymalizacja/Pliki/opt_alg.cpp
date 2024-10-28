@@ -162,8 +162,73 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 	try
 	{
 		solution Xopt;
-		//Tu wpisz kod funkcji
+		int i = 0;
+		double d_prev{};
+		double d{};
+		double c = (a+b)/2;
+		solution a_sol, b_sol, c_sol, d_sol;
+		do {
+			d_prev = d;
+			a_sol.x = a;
+			b_sol.x = b;
+			c_sol.x = c;
+			a_sol.fit_fun(ff, ud1);
+			b_sol.fit_fun(ff, ud1);
+			c_sol.fit_fun(ff, ud1);
 
+			double l = m2d(a_sol.y) * (pow(b,2) - pow(c, 2));
+			l += m2d(b_sol.y) * (pow(c, 2) - pow(a, 2));
+			l += m2d(c_sol.y) * (pow(a, 2) - pow(b, 2));
+			double m = m2d(a_sol.y) * (b - c);
+			m += m2d(b_sol.y) * (c - a);
+			m += m2d(c_sol.y) * (a - b);
+
+			if (m<=0) {
+				Xopt.flag = 0;
+				break;
+			}
+			d = 0.5 * (l / m);
+			d_sol.x = d;
+			d_sol.fit_fun(ff, ud1);
+			if (a<d && d < c) {
+				if (d_sol.y < c_sol.y) {
+					//a = a;
+					b = c;
+					c = d;
+				}
+				else {
+					a = d;
+					//c = c;
+					//b = b;
+				}
+			}
+			else if (c < d && d < b) {
+				if (d_sol.y < c_sol.y) {
+					a = c;
+					c = d;
+					//b = b;
+				}
+				else {
+					//a = a;
+					//c = c;
+					b = d;
+				}
+			}
+			else {
+				Xopt.flag = 0;
+				break;
+			}
+			i+= 1;
+			if (solution::f_calls > Nmax) {
+				Xopt.flag = 0;
+				break;
+			}
+
+		}
+		while (!(b - a < epsilon or abs(d - d_prev) <= gamma));
+
+		Xopt.x = d;
+		Xopt.fit_fun(ff, ud1);
 		return Xopt;
 	}
 	catch (string ex_info)
