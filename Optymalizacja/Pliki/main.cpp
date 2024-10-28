@@ -124,22 +124,17 @@ void lab1()
 	// std::cout << "Wyniki:\n";
 	// std::cout << test_ss.str() << std::endl;
 
-	//
-	// // ania - fibonacci w przedziale [-100; 100]
-	// epsilon = 0.001;
-	// test_opt = fib(ff1, -100 , 100 , epsilon);
-	// std::cout << "Minimum metoda Fibonacci'ego:\n";
-	// std::cout << test_opt << std::endl;
-	//
-	// //aneta test
-	//
-	// solution::clear_calls();
-	//
-	// test_opt = lag(ff1, -100, 100, epsilon, 1e-30, Nmax);
-	// std::cout << "Minimum metoda Lagrange'a:\n";
-	// std::cout << test_opt << std::endl;
-	// solution::clear_calls();
-	//
+	// przyklad bez eskpansji [-100; 100]
+	test_opt = fib(ff1, -100 , 100 , epsilon);
+	std::cout << "Minimum metoda Fibonacci'ego:\n";
+	std::cout << test_opt << std::endl;
+	solution::clear_calls();
+
+	test_opt = lag(ff1, -100, 100, epsilon, gamma, Nmax);
+	std::cout << "Minimum metoda Lagrange'a:\n";
+	std::cout << test_opt << std::endl;
+	solution::clear_calls();
+
 	// // problem rzeczywisty
 	// matrix ud1 = matrix(9, 1);
 	// ud1(0, 0) = 0.5;	// Pa - pole podst. A
