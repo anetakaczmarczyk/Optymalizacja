@@ -72,44 +72,46 @@ void lab1()
 	// solution do testow
 	solution test_opt;
 
-	//martynka expension test
 	double epsilon = 1e-18;
 	double gamma = 1e-30;
 	double d = 0.01;
 	int Nmax = 200;
 	double alpha = 1.1;
 
-
-	// Generator losowania liczb
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> x0_dist(0.0, 100.0);
-
 	std::stringstream test_ss;	// do zapisu danych
 
-	double* result=nullptr;
+	// ekspansja dla 3 roznych wspolczynnikow
+	for (int j = 0; j < 3; j++) {
+		// Generator losowania liczb
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<> x0_dist(0.0, 100.0);
 
-	for (int i = 0; i < 100; ++i)
-	{
-		double x0 = x0_dist(gen);
-		result = expansion(ff1, x0, d, alpha, Nmax);
-		// Zapis wyników do stringstream
-		test_ss << x0 << ";" << result[0] << ";" << result[1] << ";" << result[2] << ";";
-		solution::clear_calls();
+		double* result=nullptr;
 
-		// obliczanie minimum metoda fibonacciego
-		test_opt = fib(ff1, result[0], result[1], epsilon);
-		// zapis do stringa: x_min; y_min; f_calls; lokalne/globalne;
-		test_ss << m2d(test_opt.x) << ";" << m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (test_opt.x > -1 && test_opt.x < 1 ? "lokalne" : "globalne") << ";";
-		solution::clear_calls();
+		for (int i = 0; i < 100; ++i)
+		{
+			double x0 = x0_dist(gen);
+			result = expansion(ff1, x0, d, alpha, Nmax);
+			// Zapis wyników do stringstream
+			test_ss << x0 << ";" << result[0] << ";" << result[1] << ";" << result[2] << ";";
+			solution::clear_calls();
 
-		// obliczanie minimum metoda lagrange'a
-		test_opt = lag(ff1, result[0], result[1], epsilon, gamma, Nmax);
-		// zapis do stringa: x_min; y_min; f_calls
-		test_ss << m2d(test_opt.x) << ";" << m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (test_opt.x > -1 && test_opt.x < 1 ? "lokalne" : "globalne") << ";\n";
+			// obliczanie minimum metoda fibonacciego
+			test_opt = fib(ff1, result[0], result[1], epsilon);
+			// zapis do stringa: x_min; y_min; f_calls; lokalne/globalne;
+			test_ss << m2d(test_opt.x) << ";" << m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (test_opt.x > -1 && test_opt.x < 1 ? "lokalne" : "globalne") << ";";
+			solution::clear_calls();
 
-		// Zwolnienie pamięci
-		delete[] result;
+			// obliczanie minimum metoda lagrange'a
+			test_opt = lag(ff1, result[0], result[1], epsilon, gamma, Nmax);
+			// zapis do stringa: x_min; y_min; f_calls
+			test_ss << m2d(test_opt.x) << ";" << m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (test_opt.x > -1 && test_opt.x < 1 ? "lokalne" : "globalne") << ";\n";
+
+			// Zwolnienie pamięci
+			delete[] result;
+		}
+		alpha *= 2;
 	}
 
 	// zapis wynikow do pliku
@@ -121,8 +123,8 @@ void lab1()
 		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
 	}
 
-	// std::cout << "Wyniki:\n";
-	// std::cout << test_ss.str() << std::endl;
+	std::cout << "Wyniki:\n";
+	std::cout << test_ss.str() << std::endl;
 
 	// przyklad bez eskpansji [-100; 100]
 	test_opt = fib(ff1, -100 , 100 , epsilon);
