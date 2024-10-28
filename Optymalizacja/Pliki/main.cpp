@@ -7,7 +7,8 @@ Katedra Informatyki Stosowanej i Modelowania
 Akademia G�rniczo-Hutnicza
 Data ostatniej modyfikacji: 19.09.2023
 *********************************************/
-
+#include <iostream>
+#include <filesystem> // C++17 i nowsze
 #include"opt_alg.h"
 
 void lab0();
@@ -73,6 +74,7 @@ void lab1()
 
 	//martynka expension test
 	double epsilon = 1e-18;
+	double gamma = 1e-30;
 	double d = 0.01;
 	int Nmax = 200;
 	double alpha = 1.1;
@@ -83,7 +85,7 @@ void lab1()
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> x0_dist(0.0, 100.0);
 
-	std::stringstream test_ss;
+	std::stringstream test_ss;	// do zapisu danych
 
 	double* result=nullptr;
 
@@ -91,71 +93,85 @@ void lab1()
 	{
 		double x0 = x0_dist(gen);
 		result = expansion(ff1, x0, d, alpha, Nmax);
-
 		// Zapis wyników do stringstream
-		test_ss << x0 << ";" << result[0] << ";" << result[1] << ";" << result[2] << ";\n";
+		test_ss << x0 << ";" << result[0] << ";" << result[1] << ";" << result[2] << ";";
 		solution::clear_calls();
 
 		// obliczanie minimum metoda fibonacciego
 		test_opt = fib(ff1, result[0], result[1], epsilon);
-		// zapis do stringa: x_min; y_min; f_calls;
-		test_ss << m2d(test_opt.x) << "; " << m2d(test_opt.y) << "; " << test_opt.f_calls << ";\n";
+		// zapis do stringa: x_min; y_min; f_calls; lokalne/globalne;
+		test_ss << m2d(test_opt.x) << ";" << m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (test_opt.x > -1 && test_opt.x < 1 ? "lokalne" : "globalne") << ";";
 		solution::clear_calls();
+
+		// obliczanie minimum metoda lagrange'a
+		test_opt = lag(ff1, result[0], result[1], epsilon, gamma, Nmax);
+		// zapis do stringa: x_min; y_min; f_calls
+		test_ss << m2d(test_opt.x) << ";" << m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (test_opt.x > -1 && test_opt.x < 1 ? "lokalne" : "globalne") << ";\n";
 
 		// Zwolnienie pamięci
 		delete[] result;
 	}
-	std::cout << "Wyniki testu ekspansji:\n";
-	std::cout << test_ss.str() << std::endl;
 
+	// zapis wynikow do pliku
+	std::ofstream file("C:\\Users\\Ania\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab1-analiza\\lab1-100-wynikow.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file.is_open()) {
+		file << test_ss.str();
+		file.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
 
-	// ania - fibonacci w przedziale [-100; 100]
-	epsilon = 0.001;
-	test_opt = fib(ff1, -100 , 100 , epsilon);
-	std::cout << "Minimum metoda Fibonacci'ego:\n";
-	std::cout << test_opt << std::endl;
+	// std::cout << "Wyniki:\n";
+	// std::cout << test_ss.str() << std::endl;
 
-	//aneta test
-
-	solution::clear_calls();
-
-	test_opt = lag(ff1, -100, 100, epsilon, 1e-30, Nmax);
-	std::cout << "Minimum metoda Lagrange'a:\n";
-	std::cout << test_opt << std::endl;
-	solution::clear_calls();
-
-	// problem rzeczywisty
-	matrix ud1 = matrix(9, 1);
-	ud1(0, 0) = 0.5;	// Pa - pole podst. A
-	ud1(1, 0) = 90;		// Ta - temperatura
-	ud1(2, 0) = 1;		// Pb - pola podst. B
-	ud1(3, 0) = 0.00365665;	// Db (m^2) - pole przekroju
-	ud1(4, 0) = 0.01;	//FIN (m^3/s) - szybkosc wlewania
-	ud1(5, 0) = 20;		// T_in - temperatura
-	ud1(6, 0) = 0.98;	// a - lepkosc
-	ud1(7, 0) = 0.63;	// b - zwezenie strumienia
-	ud1(8, 0) = 9.81;	// g - przysp. graw.
-
-	//Zakres szukania Da
-	double Da_0_s = 1.0 * 0.0001;
-	double Da_0_f = 100 * 0.0001;
-	solution::clear_calls();
-
-	//Szukanie minimum
-	solution opt = fib(f1R, Da_0_s, Da_0_f, epsilon, ud1);
-	std::cout << opt;
-	solution::clear_calls();
-
-	//Warunki pocz¹tkowe
-	matrix Y0 = matrix(3, 1);
-	Y0(0) = 5.0; //Poczatkowa objetosc w a
-	Y0(1) = 1.0; //Poczatkowa objetosc w b
-	Y0(2) = 20.0;//Poczatkowa temperatura w b
-
-	//Symulacja
-	matrix* Y = solve_ode(df1, 0, 1, 2000, Y0, ud1, opt.x);
-	std::cout << "dupa: " << opt << std::endl;
-	solution::clear_calls();
+	//
+	// // ania - fibonacci w przedziale [-100; 100]
+	// epsilon = 0.001;
+	// test_opt = fib(ff1, -100 , 100 , epsilon);
+	// std::cout << "Minimum metoda Fibonacci'ego:\n";
+	// std::cout << test_opt << std::endl;
+	//
+	// //aneta test
+	//
+	// solution::clear_calls();
+	//
+	// test_opt = lag(ff1, -100, 100, epsilon, 1e-30, Nmax);
+	// std::cout << "Minimum metoda Lagrange'a:\n";
+	// std::cout << test_opt << std::endl;
+	// solution::clear_calls();
+	//
+	// // problem rzeczywisty
+	// matrix ud1 = matrix(9, 1);
+	// ud1(0, 0) = 0.5;	// Pa - pole podst. A
+	// ud1(1, 0) = 90;		// Ta - temperatura
+	// ud1(2, 0) = 1;		// Pb - pola podst. B
+	// ud1(3, 0) = 0.00365665;	// Db (m^2) - pole przekroju
+	// ud1(4, 0) = 0.01;	//FIN (m^3/s) - szybkosc wlewania
+	// ud1(5, 0) = 20;		// T_in - temperatura
+	// ud1(6, 0) = 0.98;	// a - lepkosc
+	// ud1(7, 0) = 0.63;	// b - zwezenie strumienia
+	// ud1(8, 0) = 9.81;	// g - przysp. graw.
+	//
+	// //Zakres szukania Da
+	// double Da_0_s = 1.0 * 0.0001;
+	// double Da_0_f = 100 * 0.0001;
+	// solution::clear_calls();
+	//
+	// //Szukanie minimum
+	// solution opt = fib(f1R, Da_0_s, Da_0_f, epsilon, ud1);
+	// std::cout << opt;
+	// solution::clear_calls();
+	//
+	// //Warunki pocz¹tkowe
+	// matrix Y0 = matrix(3, 1);
+	// Y0(0) = 5.0; //Poczatkowa objetosc w a
+	// Y0(1) = 1.0; //Poczatkowa objetosc w b
+	// Y0(2) = 20.0;//Poczatkowa temperatura w b
+	//
+	// //Symulacja
+	// matrix* Y = solve_ode(df1, 0, 1, 2000, Y0, ud1, opt.x);
+	// std::cout << "dupa: " << opt << std::endl;
+	// solution::clear_calls();
 }
 
 void lab2()
