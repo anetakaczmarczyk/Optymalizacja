@@ -154,10 +154,16 @@ void lab1()
 	double Da_0_f = 100 * 0.0001;
 	solution::clear_calls();
 
-	//Szukanie minimum
+	//Szukanie minimum metoda fibonacciego
 	solution opt = fib(f1R, Da_0_s, Da_0_f, epsilon, ud1);
-	std::cout << opt;
+	std::cout << "minimum fib" << opt;
 	solution::clear_calls();
+
+	//Szukanie minimum metoda lagrange'a
+	opt = lag(f1R, Da_0_s, Da_0_f, epsilon, gamma, Nmax, ud1);
+	std::cout << "minimum lag" << opt;
+	solution::clear_calls();
+
 	//Warunki pocz¹tkowe
 	matrix Y0 = matrix(3, 1);
 	Y0(0) = 5.0; //Poczatkowa objetosc w a
@@ -171,7 +177,7 @@ void lab1()
 
 	symulation_ss << hcat(Y[0], Y[1]) << ";";
 	// zapis wynikow do pliku
-	std::ofstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab1-analiza\\lab1-symulation-fib.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file("C:\\Users\\Ania\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab1-analiza\\lab1-symulation-fib.txt"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file.is_open()) {
 		file << symulation_ss.str();
 		file.close();
