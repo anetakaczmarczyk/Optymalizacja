@@ -115,13 +115,13 @@ void lab1()
 	}
 
 	// zapis wynikow do pliku
-	std::ofstream file("C:\\Users\\Ania\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab1-analiza\\lab1-100-wynikow.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-	if (file.is_open()) {
-		file << test_ss.str();
-		file.close();
-	}else {
-		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-	}
+	// std::ofstream file("C:\\Users\\Ania\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab1-analiza\\lab1-100-wynikow.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	// if (file.is_open()) {
+	// 	file << test_ss.str();
+	// 	file.close();
+	// }else {
+	// 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	// }
 
 	std::cout << "Wyniki:\n";
 	std::cout << test_ss.str() << std::endl;
@@ -137,38 +137,38 @@ void lab1()
 	std::cout << test_opt << std::endl;
 	solution::clear_calls();
 
-	// // problem rzeczywisty
-	// matrix ud1 = matrix(9, 1);
-	// ud1(0, 0) = 0.5;	// Pa - pole podst. A
-	// ud1(1, 0) = 90;		// Ta - temperatura
-	// ud1(2, 0) = 1;		// Pb - pola podst. B
-	// ud1(3, 0) = 0.00365665;	// Db (m^2) - pole przekroju
-	// ud1(4, 0) = 0.01;	//FIN (m^3/s) - szybkosc wlewania
-	// ud1(5, 0) = 20;		// T_in - temperatura
-	// ud1(6, 0) = 0.98;	// a - lepkosc
-	// ud1(7, 0) = 0.63;	// b - zwezenie strumienia
-	// ud1(8, 0) = 9.81;	// g - przysp. graw.
-	//
-	// //Zakres szukania Da
-	// double Da_0_s = 1.0 * 0.0001;
-	// double Da_0_f = 100 * 0.0001;
-	// solution::clear_calls();
-	//
-	// //Szukanie minimum
-	// solution opt = fib(f1R, Da_0_s, Da_0_f, epsilon, ud1);
-	// std::cout << opt;
-	// solution::clear_calls();
-	//
-	// //Warunki pocz¹tkowe
-	// matrix Y0 = matrix(3, 1);
-	// Y0(0) = 5.0; //Poczatkowa objetosc w a
-	// Y0(1) = 1.0; //Poczatkowa objetosc w b
-	// Y0(2) = 20.0;//Poczatkowa temperatura w b
-	//
-	// //Symulacja
-	// matrix* Y = solve_ode(df1, 0, 1, 2000, Y0, ud1, opt.x);
-	// std::cout << "dupa: " << opt << std::endl;
-	// solution::clear_calls();
+	// problem rzeczywisty
+	matrix ud1 = matrix(9, 1);
+	ud1(0, 0) = 0.5;	// Pa - pole podst. A
+	ud1(1, 0) = 90;		// Ta - temperatura
+	ud1(2, 0) = 1;		// Pb - pola podst. B
+	ud1(3, 0) = 0.00365665;	// Db (m^2) - pole przekroju
+	ud1(4, 0) = 0.01;	//FIN (m^3/s) - szybkosc wlewania
+	ud1(5, 0) = 20;		// T_in - temperatura
+	ud1(6, 0) = 0.98;	// a - lepkosc
+	ud1(7, 0) = 0.63;	// b - zwezenie strumienia
+	ud1(8, 0) = 9.81;	// g - przysp. graw.
+
+	//Zakres szukania Da
+	double Da_0_s = 1.0 * 0.0001;
+	double Da_0_f = 100 * 0.0001;
+	solution::clear_calls();
+
+	//Szukanie minimum
+	solution opt = fib(f1R, Da_0_s, Da_0_f, epsilon, ud1);
+	std::cout << opt;
+	solution::clear_calls();
+
+	//Warunki pocz¹tkowe
+	matrix Y0 = matrix(3, 1);
+	Y0(0) = 5.0; //Poczatkowa objetosc w a
+	Y0(1) = 1.0; //Poczatkowa objetosc w b
+	Y0(2) = 20.0;//Poczatkowa temperatura w b
+
+	//Symulacja
+	matrix* Y = solve_ode(df1, 0, 1, 2000, Y0, ud1, opt.x);
+	std::cout << "dupa: " << opt << std::endl;
+	solution::clear_calls();
 }
 
 void lab2()
