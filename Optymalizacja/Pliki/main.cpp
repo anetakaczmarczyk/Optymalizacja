@@ -156,12 +156,12 @@ void lab1()
 
 	//Szukanie minimum metoda fibonacciego
 	solution opt = fib(f1R, Da_0_s, Da_0_f, epsilon, ud1);
-	std::cout << "minimum fib" << opt;
+	std::cout << "minimum fib dla rzeczywistego\n" << opt;
 	solution::clear_calls();
 
 	//Szukanie minimum metoda lagrange'a
 	opt = lag(f1R, Da_0_s, Da_0_f, epsilon, gamma, Nmax, ud1);
-	std::cout << "minimum lag" << opt;
+	std::cout << "minimum lag dla rzeczywistego\n" << opt;
 	solution::clear_calls();
 
 	//Warunki pocz¹tkowe
@@ -202,7 +202,7 @@ void lab1()
 	std::stringstream symulationLag_ss;	// do zapisu danych
 	symulationLag_ss << hcat(Y[0], Y[1]) << ";";
 	// zapis wynikow do pliku
-	std::ofstream file1(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-lag.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file1(R"(C:\Users\Ania\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-lag.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file1.is_open()) {
 		file1 << symulationLag_ss.str();
 		file1.close();
