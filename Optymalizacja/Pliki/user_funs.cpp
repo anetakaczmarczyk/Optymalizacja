@@ -44,7 +44,7 @@ matrix f1R(matrix x , matrix ud1, matrix ud2){
     //dla tego nie uzywamy metody ekspansjif1R
     matrix y;
     matrix Y0=matrix(3,new double[]{5,1,20});
-    matrix* Y= solve_ode(df1, 0,1,200,Y0,ud1,x);
+    matrix* Y= solve_ode(df1, 0,1,2000,Y0,ud1,x);
     //df1 funkcja ktora zwraca rownanie rozniczkowe
     int n=get_len(Y[0]);
     double max=Y[1](0,2); //(0,2)? -> tak jest skonstruowana matrix
@@ -53,6 +53,7 @@ matrix f1R(matrix x , matrix ud1, matrix ud2){
             max=Y[1](i,2);
     }
     y=abs(max-50);
+
     return y;
 }
 
@@ -61,9 +62,9 @@ matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
 	matrix dY(3,1);
 
 	// zmienne zadania
-	double Va = dY(0);
-	double Vb = dY(1);
-	double Tb = dY(2);
+	double Va = Y(0);
+	double Vb = Y(1);
+	double Tb = Y(2);
 	// dane z zadania
 	double Pa = ud1(0);
 	double Ta = ud1(1);
@@ -102,6 +103,5 @@ matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
 	else
 		dY(2) = 0; //Pusty zbiornik B
 	//Zwracanie zmian po czasie
-
 	return dY;
 }
