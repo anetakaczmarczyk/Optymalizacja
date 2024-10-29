@@ -122,9 +122,13 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 		double c0 = b0 - phi[k-1] / phi[k] * (b0 - a0);
 		double d0 = a0 + b0 - c0;
 
+		// std::stringstream fib_ss;	// do zapisu danych
+
 		solution c_sol, d_sol;	// jak sie chce miec wartosc funkcji w punkcie to trzeba uzyc klasy solution xd
 		for (int i = 0; i <= k - 3; ++i)
 		{
+
+			// fib_ss << b0-a0 << ";" << std::endl;
 			c_sol.x = c0;
 			c_sol.fit_fun(ff, ud1);	// to uzupelnia pole y w klasie solution
 
@@ -142,6 +146,15 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 			c0 = b0 - phi[k - i - 2] / phi[k - i - 1] * (b0 - a0);
 			d0 = a0 + b0 - c0;
 		}
+
+		// zapis wynikow do pliku
+		// std::ofstream file(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-100-przedzialow-fib.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+		// if (file.is_open()) {
+		// 	file << fib_ss.str();
+		// 	file.close();
+		// }else {
+		// 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+		// }
 
 		// zwracanie rozwiazania
 		solution Xopt;
@@ -167,7 +180,9 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 		double d{};
 		double c = (a+b)/2;
 		solution a_sol, b_sol, c_sol, d_sol;
+		// std::stringstream lag_ss;	// do zapisu danych
 		do {
+			// lag_ss << b-a << ";" << std::endl;
 			d_prev = d;
 			a_sol.x = a;
 			b_sol.x = b;
@@ -226,7 +241,14 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 
 		}
 		while (!(b - a < epsilon or abs(d - d_prev) <= gamma));
-
+		// zapis wynikow do pliku
+		// std::ofstream file(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-100-przedzialow-lag.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+		// if (file.is_open()) {
+		// 	file << lag_ss.str();
+		// 	file.close();
+		// }else {
+		// 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+		// }
 		Xopt.x = d;
 		Xopt.fit_fun(ff, ud1);
 		return Xopt;
