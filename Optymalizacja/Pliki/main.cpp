@@ -138,7 +138,7 @@ void lab1()
 	solution::clear_calls();
 
 	// problem rzeczywisty
-	std::stringstream symulation_ss;	// do zapisu danych
+
 	matrix ud1 = matrix(9, 1);
 	ud1(0, 0) = 0.5;	// Pa - pole podst. A
 	ud1(1, 0) = 90;		// Ta - temperatura
@@ -172,19 +172,52 @@ void lab1()
 
 	//Symulacja
 	matrix* Y = solve_ode(df1, 0, 1, 2000, Y0, ud1, opt.x);
-
-	std::cout << "dupa: " << opt << std::endl;
-
-	symulation_ss << hcat(Y[0], Y[1]) << ";";
+	std::stringstream symulationFib_ss;	// do zapisu danych
+	symulationFib_ss << hcat(Y[0], Y[1]) << ";";
 	// zapis wynikow do pliku
 	std::ofstream file("C:\\Users\\Ania\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab1-analiza\\lab1-symulation-fib.txt"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file.is_open()) {
-		file << symulation_ss.str();
+		file << symulationFib_ss.str();
 		file.close();
 	}else {
 		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
 	}
+	// Max temp
+	int n = get_len(Y[0]);
+	double Tb_max = Y[1](0, 2);
+	for (int i = 0; i < n; ++i)
+	{
+		if (Tb_max < Y[1](i, 2))
+			Tb_max = Y[1](i, 2);
+	}
+	std::cout << "Fibonacci tb_max: " << Tb_max << "\n\n";
 
+	//Szukanie minimum
+	opt = lag(f1R, Da_0_s, Da_0_f, epsilon, epsilon, Nmax, ud1);
+	std::cout << opt;
+	solution::clear_calls();
+
+	//Symulacja
+	Y = solve_ode(df1, 0, 1, 2000, Y0, ud1, opt.x);
+	std::stringstream symulationLag_ss;	// do zapisu danych
+	symulationLag_ss << hcat(Y[0], Y[1]) << ";";
+	// zapis wynikow do pliku
+	std::ofstream file1(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-lag.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file1.is_open()) {
+		file1 << symulationLag_ss.str();
+		file1.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
+	// Max temp
+	 n = get_len(Y[0]);
+	 Tb_max = Y[1](0, 2);
+	for (int i = 0; i < n; ++i)
+	{
+		if (Tb_max < Y[1](i, 2))
+			Tb_max = Y[1](i, 2);
+	}
+	std::cout << "Lagrange tb_max: " << Tb_max << "\n\n";
 }
 
 void lab2()
