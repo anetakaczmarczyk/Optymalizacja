@@ -126,10 +126,10 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 		for (int i = 0; i <= k - 3; ++i)
 		{
 			c_sol.x = c0;
-			c_sol.fit_fun(ff);	// to uzupelnia pole y w klasie solution
+			c_sol.fit_fun(ff, ud1);	// to uzupelnia pole y w klasie solution
 
 			d_sol.x = d0;
-			d_sol.fit_fun(ff);
+			d_sol.fit_fun(ff, ud1);
 
 			// redukowanie przedziału
 			if (c_sol.y < d_sol.y) {
@@ -146,7 +146,7 @@ solution fib(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 		// zwracanie rozwiazania
 		solution Xopt;
 		Xopt.x = c0;
-		Xopt.fit_fun(ff);
+		Xopt.fit_fun(ff, ud1);
 
 		return Xopt;
 	}

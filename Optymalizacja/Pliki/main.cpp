@@ -148,7 +148,6 @@ void lab1()
 	ud1(6, 0) = 0.98;	// a - lepkosc
 	ud1(7, 0) = 0.63;	// b - zwezenie strumienia
 	ud1(8, 0) = 9.81;	// g - przysp. graw.
-
 	//Zakres szukania Da
 	double Da_0_s = 1.0 * 0.0001;
 	double Da_0_f = 100 * 0.0001;
@@ -158,7 +157,6 @@ void lab1()
 	solution opt = fib(f1R, Da_0_s, Da_0_f, epsilon, ud1);
 	std::cout << opt;
 	solution::clear_calls();
-
 	//Warunki pocz¹tkowe
 	matrix Y0 = matrix(3, 1);
 	Y0(0) = 5.0; //Poczatkowa objetosc w a

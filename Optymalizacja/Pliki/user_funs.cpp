@@ -41,7 +41,7 @@ matrix ff1(matrix x, matrix ud1, matrix ud2)
 	return y;
 }
 matrix f1R(matrix x , matrix ud1, matrix ud2){
-    //dla tego nie uzywamy metody ekspansji
+    //dla tego nie uzywamy metody ekspansjif1R
     matrix y;
     matrix Y0=matrix(3,new double[]{5,1,20});
     matrix* Y= solve_ode(df1, 0,1,200,Y0,ud1,x);
@@ -59,6 +59,7 @@ matrix f1R(matrix x , matrix ud1, matrix ud2){
 matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
 	// wektor zmian po czasie
 	matrix dY(3,1);
+
 	// zmienne zadania
 	double Va = dY(0);
 	double Vb = dY(1);
@@ -73,8 +74,10 @@ matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
 	double a = ud1(6);
 	double b = ud1(7);
 	double g = ud1(8);
-	double Da = ud2(1);	// to bedziemy optymalizowac
+	double Da = ud2(0);	// to bedziemy optymalizowac
+	// std::cout << ud2 << endl;
 	// obliczanie wylanego strumienia ze zbiornika A
+
 	double Fa_out{};
 	if (Va > 0.0)
 		Fa_out = a * b * Da * sqrt(2 * g * Va / Pa); // Va to nasz Y(0)
@@ -99,5 +102,6 @@ matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
 	else
 		dY(2) = 0; //Pusty zbiornik B
 	//Zwracanie zmian po czasie
+
 	return dY;
 }
