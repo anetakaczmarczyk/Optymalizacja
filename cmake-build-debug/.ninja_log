@@ -1,0 +1,12 @@
+# ninja log v6
+169	1036	7518959773251203	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/user_funs.cpp.obj	47b9a62c4f512241
+79	1041	7518959772340370	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/ode_solver.cpp.obj	455d6bc49a35c5c4
+132	1059	7518959772880869	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/solution.cpp.obj	3b5787caf4b72de8
+22	1067	7518959771779935	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/main.cpp.obj	76f225f316e37cbe
+98	1114	7518959772540569	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/opt_alg.cpp.obj	d13d90a3d31ef340
+58	1148	7518959772140190	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/matrix.cpp.obj	d41ba0937a87771a
+1148	1428	7518959783040091	Optymalizacja.exe	c5c0f978be3179ba
+26	896	7519331465385447	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/main.cpp.obj	76f225f316e37cbe
+43	801	7519337470905997	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/user_funs.cpp.obj	47b9a62c4f512241
+11	808	7519337470585701	CMakeFiles/Optymalizacja.dir/Optymalizacja/Pliki/main.cpp.obj	76f225f316e37cbe
+808	1078	7519337478562951	Optymalizacja.exe	c5c0f978be3179ba
