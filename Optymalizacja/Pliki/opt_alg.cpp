@@ -260,7 +260,9 @@ solution lag(matrix(*ff)(matrix, matrix, matrix), double a, double b, double eps
 }
 
 solution HJ(matrix(*ff)(matrix, matrix, matrix), matrix x0, double s, double alpha, double epsilon, int Nmax, matrix ud1, matrix ud2)
-{
+{//etap probny -> badamy lokalne zachowanie funkcji wokol[ [unktu bazowego i uzywamy tego punktu bazowaego
+    //etap roboczy -> przenosimys sie do nowego punktu i w nim robimy znowu etap probny
+
 	try
 	{
 		solution Xopt;
@@ -289,11 +291,16 @@ solution HJ_trial(matrix(*ff)(matrix, matrix, matrix), solution XB, double s, ma
 }
 
 solution Rosen(matrix(*ff)(matrix, matrix, matrix), matrix x0, matrix s0, double alpha, double beta, double epsilon, int Nmax, matrix ud1, matrix ud2)
-{
+{//wektor p to wektor porazek jak moje zycie
+    //i nr czegos i J nr bazu? nwm do ktorego alg to bo nie sluchalam
 	try
 	{
 		solution Xopt;
 		//Tu wpisz kod funkcji
+        //macierz D to macierz kierunkow  d1 d2 i potem macierz
+        //zlozona z lambd
+        //zaimplementowac w 2D
+
 
 		return Xopt;
 	}
