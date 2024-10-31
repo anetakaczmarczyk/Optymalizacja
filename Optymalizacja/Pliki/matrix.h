@@ -1,4 +1,4 @@
-//Ten plik nie powinien byæ edytowany
+//Ten plik nie powinien byï¿½ edytowany
 
 #pragma once
 
@@ -8,6 +8,8 @@
 #include<fstream>
 #include<random>
 #include<chrono>
+
+#include "solution.h"
 using namespace std;
 
 #define SEP_SYMBOL ','
@@ -37,7 +39,7 @@ public:
 	void add_row(const matrix&); // throw (string);
 };
 
-matrix operator+(const matrix&, const matrix&); // throw (string);
+matrix operator+(doublesx, const matrix&); // throw (string);
 matrix operator-(const matrix&, const matrix&); // throw (string);
 matrix operator*(const matrix&, const matrix&); // throw (string);
 matrix operator/(const matrix&, const matrix&); // throw (string);
