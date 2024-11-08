@@ -10,7 +10,7 @@ Data ostatniej modyfikacji: 19.09.2023
 #include <iostream>
 #include <filesystem> // C++17 i nowsze
 #include"opt_alg.h"
-
+//m
 void lab0();
 void lab1();
 void lab2();
@@ -181,7 +181,7 @@ void lab1()
 		file.close();
 	}else {
 		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-	}p
+	}
 
 	// Max temp
 	int n = get_len(Y[0]);
