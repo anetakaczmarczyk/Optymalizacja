@@ -304,7 +304,7 @@ solution HJ_trial(matrix(*ff)(matrix, matrix, matrix), solution XB, double s, ma
 				XB.x = temp;
 			}
 		}
-
+//aa
 		return XB.x;
 	}
 	catch (string ex_info)
