@@ -224,7 +224,7 @@ void lab1()
 void lab2()
 {
 	//Aneta test
-	int x = 2;
+	HJ(ff2T, 2, 3, 2, 0.001, 10000);
 }
 
 void lab3()

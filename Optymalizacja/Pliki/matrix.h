@@ -39,7 +39,7 @@ public:
 	void add_row(const matrix&); // throw (string);
 };
 
-matrix operator+(doublesx, const matrix&); // throw (string);
+matrix operator+(double sx, const matrix&); // throw (string);
 matrix operator-(const matrix&, const matrix&); // throw (string);
 matrix operator*(const matrix&, const matrix&); // throw (string);
 matrix operator/(const matrix&, const matrix&); // throw (string);

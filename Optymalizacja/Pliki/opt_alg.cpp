@@ -264,12 +264,36 @@ solution HJ(matrix(*ff)(matrix, matrix, matrix), matrix x0, double s, double alp
 
 	try
 	{
+
 		solution Xopt;
 		//Tu wpisz kod funkcji
-		solution XB;
-		XB.x = x0;
-		XB.fit_fun(ff, ud1);
-		x0 = HJ_trial(ff,XB, s, ud1, ud2);
+		solution XB, X;
+		X.x = x0;
+		while (s<epsilon) {
+			XB.x = X.x;
+			XB.fit_fun(ff, ud1);
+			X = HJ_trial(ff, XB, s, ud1, ud2);
+			X.fit_fun(ff, ud1);
+			if(X.y < XB.y) {
+				while(X.y < XB.y) {
+					solution tempXB = XB;
+					XB = X;
+					X.x = 2*XB.x - tempXB.x;
+					X = HJ_trial(ff, X, s, ud1, ud2);
+					X.fit_fun(ff, ud1);
+					if (solution::f_calls > Nmax) {
+						break;
+					}
+				}
+			}
+			else {
+				s = alpha * s;
+			}
+			if(solution::f_calls > Nmax) {
+				Xopt.flag = 0;
+				break;
+			}
+		}
 		return Xopt;
 	}
 	catch (string ex_info)
@@ -282,29 +306,23 @@ solution HJ_trial(matrix(*ff)(matrix, matrix, matrix), solution XB, double s, ma
 {
 	try
 	{
-		int n = 2;
-		vector<vector<double>> e;
-		e[0][0] = 1;
-		e[0][1] = 0;
-		e[1][0] = 0;
-		e[1][1] = 1;
+		int n = 2; // Bo 2 wymiary, byłoby 3 jakby 3 wymiary
+
 		//Tu wpisz kod funkcji
-		for (int i = 1; i<n; i++) {
+		for (int i = 0; i<n; i++) {
+			XB.fit_fun(ff, ud1);
 			solution f1_sol, f2_sol;
-			f1_sol.x = XB.x + s * e[i][0];
+			f1_sol.x = XB.x + s;
 			f1_sol.fit_fun(ff, ud1);
-			f2_sol.x = XB.x - s * e[i][0];
+			f2_sol.x = XB.x - s;
 			f2_sol.fit_fun(ff, ud1);
 			if (f1_sol.y < XB.y) {
-				double temp = m2d(XB.x) + s * e[i][0];
-				XB.x = temp;
+				XB.x = m2d(XB.x) + s;
 			}
 			else if(f2_sol.y < XB.y) {
-				double temp = m2d(XB.x) - s * e[i][0];
-				XB.x = temp;
+				XB.x = m2d(XB.x) - s;
 			}
 		}
-//aa
 		return XB.x;
 	}
 	catch (string ex_info)
