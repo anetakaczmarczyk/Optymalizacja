@@ -223,9 +223,11 @@ void lab1()
 void lab2()
 {
 	//Aneta test
-	matrix test = matrix(2, new double[2] {-0.4, 0.9});
+	matrix test = matrix(2, new double[2] {-0.5, 0.5});
 	solution opt = HJ(ff2T, test,  0.1, 0.1, 1E-6, 2000);
 	std::cout << "HJ\n" << opt;
+	solution rosen = Rosen(ff2T, test, matrix(2, new double[2]{0.1, 0.1}),0.1, 0.1, 1E-6, 2000);
+	std::cout << "Rosen\n" << rosen;
 }
 
 void lab3()
