@@ -267,6 +267,7 @@ solution HJ(matrix(*ff)(matrix, matrix, matrix), matrix x0, double s, double alp
 		solution Xopt;
 		//Tu wpisz kod funkcji
 
+
 		return Xopt;
 	}
 	catch (string ex_info)
