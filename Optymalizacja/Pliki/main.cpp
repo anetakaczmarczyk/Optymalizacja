@@ -223,7 +223,8 @@ void lab1()
 void lab2()
 {
 	//Aneta test
-	solution opt = HJ(ff2T, 2,  3, 2, 0.001, 10000);
+	matrix test = matrix(2, new double[2] {-0.4, 0.9});
+	solution opt = HJ(ff2T, test,  0.1, 0.1, 1E-6, 2000);
 	std::cout << "HJ\n" << opt;
 }
 
