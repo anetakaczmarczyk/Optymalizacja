@@ -224,13 +224,22 @@ void lab1()
 
 void lab2()
 {
+	//warunki do obu
+	double s = 0.1;
+	double alpha = 0.1;
+	double beta = 0.1;
+	double epsilon = 1E-6;
+	int Nmax = 2000;
+	double alphaRosen = 1.2;
 
 	//Aneta test
-	matrix test = matrix(2, new double[2] {-0.5, 0.5});
-	solution opt = HJ(ff2T, test,  0.1, 0.1, 1E-6, 2000);
-	std::cout << "HJ\n" << opt;
-	solution rosen = Rosen(ff2T, test, matrix(2, new double[2]{0.1, 0.1}),0.1, 0.1, 1E-6, 2000);
-	std::cout << "Rosen\n" << rosen;
+	// matrix test = matrix(2, new double[2] {-0.5, 0.5});
+	// solution opt = HJ(ff2T, test,  0.1, 0.1, 1E-6, 2000);
+	// std::cout << "HJ\n" << opt;
+	// solution::clear_calls();
+	// solution rosen = Rosen(ff2T, test, matrix(2, new double[2]{0.1, 0.1}),0.1, 0.1, 1E-6, 2000);
+	// std::cout << "Rosen\n" << rosen;
+	// solution::clear_calls();
   
 	// Problem rzeczywisty
 	// dane do zadania
@@ -248,11 +257,19 @@ void lab2()
 	k_0(1, 0) = 1.0;
 
 	matrix Y = matrix(2, 1);
-	Y(0, 0) = 0.5;
 
 	// tu funkcja anetki (do niej sie wklada ff2R)
-	// solution opt =
+	solution realHJ = HJ(ff2R, k_0, s, alpha, epsilon, Nmax,  ud1);
+	std::cout << "HJ realistyczny\n" << realHJ;
+	solution::clear_calls();
+	matrix* X = solve_ode(df2, 0.0, 0.1, 100.0, Y, ud1, realHJ.x);
+	cout << X[1];
 
+	// solution realRosen = Rosen(ff2R, k_0, matrix(2, new double[2] {s, s}), alphaRosen, beta, epsilon, Nmax, ud1);
+	// std::cout << "Rosen realistyczny\n" << realRosen;
+	// solution::clear_calls();
+	// matrix* X = solve_ode(df2, 0.0, 0.1, 100.0, Y, ud1, realRosen.x);
+	// cout << X[1];
 }
 
 void lab3()
