@@ -266,6 +266,7 @@ solution HJ(matrix (*ff)(matrix, matrix, matrix), matrix x0, double s, double al
     } catch (string ex_info) {
         throw ("solution HJ(...):\n" + ex_info);
     }
+
 }
 
 solution HJ_trial(matrix (*ff)(matrix, matrix, matrix), solution XB, double s, matrix ud1, matrix ud2) {

@@ -112,3 +112,36 @@ matrix ff2T(matrix x, matrix ud1, matrix ud2) {
 	y = pow(x(0), 2) + pow(x(1), 2) - cos(2.5 * M_PI * x(0)) - cos(2.5 * M_PI * x(1)) + 2;
 	return y;
 }
+
+matrix ff2R(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+	y = 0;
+
+	// warunki poczatkowe
+	matrix Y0(2,1);
+	matrix Yref(2, new double[]{3.14, 0});
+
+	Y0 = ud1(4);
+	Y0 = ud1(5);
+
+	Yref = Y0(1);
+	// Yref =
+
+	matrix * Y = solve_ode(df, 0, 0.1, 100, Y0, Yref, x);
+
+	double alpha_ref = ud1(4);
+	double omega_ref = ud1(5);
+
+	y = 0;
+	int n = get_len(Y[0]);
+
+	for(int i = 0; i < n; i++) {
+	// wedlug funkcji podcalkowej
+		y=y+10*pow(Yref(0) - Y[1](i,0),2) + pow*(Yref(1) - Y[1](i,1),2) + pow(x(0) *( Yref(0)-Y[1](i,0)) +
+			+ x(1) *(Yref(1)-Y[1](i,1) ),2);
+	}
+
+	y = y * 0.1;
+
+
+}

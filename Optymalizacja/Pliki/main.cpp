@@ -182,6 +182,8 @@ void lab1()
 	}else {
 		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
 	}
+
+
 	// Max temp
 	int n = get_len(Y[0]);
 	double Tb_max = Y[1](0, 2);
@@ -222,12 +224,35 @@ void lab1()
 
 void lab2()
 {
+
 	//Aneta test
 	matrix test = matrix(2, new double[2] {-0.5, 0.5});
 	solution opt = HJ(ff2T, test,  0.1, 0.1, 1E-6, 2000);
 	std::cout << "HJ\n" << opt;
 	solution rosen = Rosen(ff2T, test, matrix(2, new double[2]{0.1, 0.1}),0.1, 0.1, 1E-6, 2000);
 	std::cout << "Rosen\n" << rosen;
+  
+	// Problem rzeczywisty
+	// dane do zadania
+	matrix ud1(6, 1);
+	ud1(0, 0) = 1.0;	// dlugosc ramienia (m)
+	ud1(1, 0) = 1.0;	// masa ramienia (kg)
+	ud1(2, 0) = 5.0;	// masa ciezarku (kg)
+	ud1(3, 0) = 0.5;	// wspolczynnik tarcia (Nms)
+	ud1(4, 0) = 3.14;	// alpha_ref (rad)
+	ud1(5, 0) = 0.0;	// omega_ref (rad/s)
+
+	// warunki poczatkowe
+	matrix k_0 (2, 1);
+	k_0(0, 0) = 1.0;
+	k_0(1, 0) = 1.0;
+
+	matrix Y = matrix(2, 1);
+	Y(0, 0) = 0.5;
+
+	// tu funkcja anetki (do niej sie wklada ff2R)
+	// solution opt =
+
 }
 
 void lab3()
