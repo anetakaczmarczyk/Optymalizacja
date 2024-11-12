@@ -175,14 +175,13 @@ void lab1()
 	std::stringstream symulationFib_ss;	// do zapisu danych
 	symulationFib_ss << hcat(Y[0], Y[1]) << ";";
 	// zapis wynikow do pliku
-	std::ofstream file(R"(C:\Users\marty\Desktop\dobra_opt\Optymalizacja\lab1-analiza\lab1-symulation-fib.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-fib.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file.is_open()) {
 		file << symulationFib_ss.str();
 		file.close();
 	}else {
 		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-	}p
-
+	}
 	// Max temp
 	int n = get_len(Y[0]);
 	double Tb_max = Y[1](0, 2);
@@ -203,7 +202,7 @@ void lab1()
 	std::stringstream symulationLag_ss;	// do zapisu danych
 	symulationLag_ss << hcat(Y[0], Y[1]) << ";";
 	// zapis wynikow do pliku
-	std::ofstream file1(R"(C:\Users\marty\Desktop\dobra_opt\Optymalizacja\lab1-analiza\lab1-symulation-lag.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file1(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-lagtxt)"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file1.is_open()) {
 		file1 << symulationLag_ss.str();
 		file1.close();
@@ -224,7 +223,8 @@ void lab1()
 void lab2()
 {
 	//Aneta test
-	HJ(ff2T, 2, 3, 2, 0.001, 10000);
+	solution opt = HJ(ff2T, 2,  3, 2, 0.001, 10000);
+	std::cout << "HJ\n" << opt;
 }
 
 void lab3()

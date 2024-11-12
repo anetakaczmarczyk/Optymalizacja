@@ -107,7 +107,7 @@ matrix df1(double t, matrix Y, matrix ud1, matrix ud2) {
 }
 
 // lab 2 functions
-matrix ff2T(matrix x1, matrix x2, matrix ud1, matrix ud2) {
+matrix ff2T(matrix x1, matrix x2, matrix ud1) {
 	matrix y;
 	y = pow(m2d(x1), 2) + pow(m2d(x2), 2) - cos(2.5 * M_PI * m2d(x1)) - cos(2.5 * M_PI * m2d(x2)) + 2;
 	return y;
