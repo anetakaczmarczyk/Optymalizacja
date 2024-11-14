@@ -23,7 +23,7 @@ int main()
 {
 	try
 	{
-		lab1();
+		lab2();
 	}
 	catch (string EX_INFO)
 	{
@@ -175,13 +175,14 @@ void lab1()
 	std::stringstream symulationFib_ss;	// do zapisu danych
 	symulationFib_ss << hcat(Y[0], Y[1]) << ";";
 	// zapis wynikow do pliku
-	std::ofstream file(R"(C:\Users\marty\Desktop\dobra_opt\Optymalizacja\lab1-analiza\lab1-symulation-fib.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-fib.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file.is_open()) {
 		file << symulationFib_ss.str();
 		file.close();
 	}else {
 		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
 	}
+
 
 	// Max temp
 	int n = get_len(Y[0]);
@@ -203,7 +204,7 @@ void lab1()
 	std::stringstream symulationLag_ss;	// do zapisu danych
 	symulationLag_ss << hcat(Y[0], Y[1]) << ";";
 	// zapis wynikow do pliku
-	std::ofstream file1(R"(C:\Users\marty\Desktop\dobra_opt\Optymalizacja\lab1-analiza\lab1-symulation-lag.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file1(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-lagtxt)"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file1.is_open()) {
 		file1 << symulationLag_ss.str();
 		file1.close();
@@ -223,6 +224,65 @@ void lab1()
 
 void lab2()
 {
+	//warunki do obu
+	double s = 0.1;
+	double alpha = 0.2;
+	double beta = 0.2;
+	double epsilon = 1E-18;
+	int Nmax = 2000;
+	double alphaRosen = 1.2;
+
+	double tolerance = 1e-4;
+	solution test_opt;
+	std::stringstream test_ss;	// do zapisu danych
+
+	// dla 3 różnych kroków s: 0.1, 1.1, 2.1
+	// for (int j = 0; j < 3; j++) {
+	// 	// Generator losowania liczb
+	// 	std::random_device rd;
+	// 	std::mt19937 gen(rd());
+	// 	std::uniform_real_distribution<> x0_dist(-1.0, 1.0);
+	//
+	// 	for (int i = 0; i < 100; ++i)
+	// 	{
+	//
+	// 		matrix x0 = matrix(2, new double[2] {x0_dist(gen), x0_dist(gen)});
+	// 		//zapis do stringa: x1; x2 wygenerowane
+	// 		test_ss << x0(0) << ";" << x0(1) << ";";
+	// 		test_opt = HJ(ff2T, x0,  s, alpha, epsilon, Nmax);
+	//
+	// 		// zapis do stringa: x1_min; x2_min; y_min; f_calls; globalne/lokalne;
+	// 		test_ss << m2d(test_opt.x(0)) << ";"<< m2d(test_opt.x(1)) << ";"<< m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (abs(m2d(test_opt.y) ) < tolerance ? "TAK" : "NIE") << ";";
+	// 		solution::clear_calls();
+	//
+	// 		test_opt = Rosen(ff2T, x0, matrix(2, new double[2] {s, s}), alphaRosen, beta, epsilon, Nmax);
+	// 		// zapis do stringa: x1_min; x1_min; y_min; f_calls; globalne/lokalne
+	// 		test_ss << m2d(test_opt.x(0)) << ";"<< m2d(test_opt.x(1)) << ";"<< m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (abs(m2d(test_opt.y) ) < tolerance ? "TAK" : "NIE") << ";\n";
+	// 		solution::clear_calls();
+	// 	}
+	// 	s+=1;
+	// }
+
+	// zapis wynikow do pliku
+	// std::ofstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab2-analiza\\lab2-100-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	// if (file.is_open()) {
+	// 	file << test_ss.str();
+	// 	file.close();
+	// }else {
+	// 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	// }
+
+	// std::cout << "Wyniki:\n";
+	// std::cout << test_ss.str() << std::endl;
+
+	//powrót do kroku równego 0.1
+	s = 0.1;
+	//Excel - wykres
+	// matrix x0 = matrix(2, new double[2] {-0.45, 0.45});
+	// HJ(ff2T, x0,  s, alpha, epsilon, Nmax);
+	// Rosen(ff2T, x0, matrix(2, new double[2] {s, s}), alphaRosen, beta, epsilon, Nmax);
+
+  
 	// Problem rzeczywisty
 	// dane do zadania
 	matrix ud1(6, 1);
@@ -239,11 +299,37 @@ void lab2()
 	k_0(1, 0) = 1.0;
 
 	matrix Y = matrix(2, 1);
-	Y(0, 0) = 0.5;
 
-	// tu funkcja anetki (do niej sie wklada ff2R)
-	// solution opt =
+	solution realHJ = HJ(ff2R, k_0, s, alpha, epsilon, Nmax,  ud1);
+	std::cout << "HJ realistyczny\n" << realHJ;
+	solution::clear_calls();
+	// matrix* X = solve_ode(df2, 0.0, 0.1, 100.0, Y, ud1, realHJ.x);
 
+	// std::stringstream symulationHJ_ss;	// do zapisu danych
+	// symulationHJ_ss << hcat(X[0], X[1]) << ";";
+	// // zapis wynikow do pliku
+	// std::ofstream file(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab2-analiza\lab2-symulation-HJ.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	// if (file.is_open()) {
+	// 	file << symulationHJ_ss.str();
+	// 	file.close();
+	// }else {
+	// 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	// }
+
+	// solution realRosen = Rosen(ff2R, k_0, matrix(2, new double[2] {s, s}), alphaRosen, beta, epsilon, Nmax, ud1);
+	// std::cout << "Rosen realistyczny\n" << realRosen;
+	// solution::clear_calls();
+	// matrix* X = solve_ode(df2, 0.0, 0.1, 100.0, Y, ud1, realRosen.x);
+	// std::stringstream symulationRosen_ss;	// do zapisu danych
+	// symulationRosen_ss << hcat(X[0], X[1]) << ";";
+	// // zapis wynikow do pliku
+	// std::ofstream file(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab2-analiza\lab2-symulation-Rosen.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	// if (file.is_open()) {
+	// 	file << symulationRosen_ss.str();
+	// 	file.close();
+	// }else {
+	// 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	// }
 }
 
 void lab3()
