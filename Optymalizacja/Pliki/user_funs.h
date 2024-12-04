@@ -17,3 +17,8 @@ matrix df2(double, matrix, matrix = NAN, matrix = NAN);
 matrix ff2T(matrix, matrix = NAN, matrix = NAN);
 matrix ff2R(matrix, matrix = NAN, matrix = NAN);
 
+//lab 3
+matrix df3(double, matrix, matrix = NAN, matrix = NAN);
+matrix ff3T_out(matrix, matrix = NAN, matrix = NAN);
+matrix ff3T_in(matrix, matrix = NAN, matrix = NAN);
+matrix ff3R(matrix, matrix = NAN, matrix = NAN);

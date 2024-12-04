@@ -23,7 +23,7 @@ int main()
 {
 	try
 	{
-		lab2();
+		lab3();
 	}
 	catch (string EX_INFO)
 	{
@@ -334,7 +334,92 @@ void lab2()
 
 void lab3()
 {
+	double epsilon = 1E-3;
+	int Nmax = 1000000;
+	double c_inside = 10.0;
+	double dc_inside = 0.2;
+	double c_outside = 1.0;
+	double dc_outside = 1.5;
 
+	matrix data(5, 1);
+	data(0) = 0.5;
+	data(1) = 1.0;
+	data(2) = 0.5;
+	data(3) = 2.0;
+	data(4) = 0.5;
+	solution test_opt;
+	std::stringstream test_ss;	// do zapisu danych
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> x0_dist(1.5, 5.5);
+	// dla 3 różnych alpha: 4.0, 4.4934. 5.0
+	for (int j = 0; j < 3; j++) {
+		// Generator losowania liczb
+
+		matrix a;
+		if (j == 0) a = matrix(4.0);
+		else if (j == 1) a = matrix(4.4934);
+		else a = matrix(5.0);
+		for (int i = 0; i < 100; ++i)
+		{
+
+			matrix x0 = matrix(2, new double[2] {x0_dist(gen), x0_dist(gen)});
+			//zapis do stringa: x1; x2 wygenerowane
+			test_ss << x0(0) << ";" << x0(1) << ";";
+			test_opt = pen(ff3T_out, x0, c_outside, dc_outside, epsilon, Nmax, a, data);
+			// // zapis do stringa: x1; x2; r; y; f_calls;
+			test_ss << m2d(test_opt.x(0)) << ";"<< m2d(test_opt.x(1)) << ";"<< sqrt(pow(test_opt.x(0), 2) + pow(test_opt.x(1), 2)) << ";" << test_opt.y(0)  << ";"<< solution::f_calls << ";";
+			solution::clear_calls();
+
+			test_opt = pen(ff3T_in, x0, c_inside, dc_inside, epsilon, Nmax, a, data);
+			// zapis do stringa: x1; x2; r; y; f_calls;
+			test_ss << m2d(test_opt.x(0)) << ";"<< m2d(test_opt.x(1)) << ";"<< sqrt(pow(test_opt.x(0), 2) + pow(test_opt.x(1), 2)) << ";" << test_opt.y(0) << ";" << solution::f_calls << ";\n";
+			solution::clear_calls();
+		}
+	}
+
+	// zapis wynikow do pliku
+	std::ofstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab3-analiza\\lab3-100-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file.is_open()) {
+		file << test_ss.str();
+		file.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
+
+	std::cout << "Wyniki:\n";
+	std::cout << test_ss.str() << std::endl;
+
+	// Problem rzeczywisty
+	// dane do zadania
+	matrix x0(2, 1);
+	x0(0)= 5.0;
+	x0(1)=10.0;
+
+	matrix ud1 = matrix(5, 1);
+	ud1(0)= 0.47; //Współczynnik oporu (C) [-]
+	ud1(1)=	1.2; //Gęstość powietrza (rho) [kg/m^3]
+	ud1(2)=	0.12; //Promień piłki (r) [m]
+	ud1(3)=	0.6; //Masa piłki (m) [kg]
+	ud1(4)=	9.81; //Przyśpieszenie ziemskie (g) [m/s^2]
+	matrix ud2;
+	solution opt = pen(ff3R, x0, c_outside, dc_outside, epsilon, Nmax,  ud1, data);
+	cout << opt << "\n";
+	solution::clear_calls();
+	matrix Y0(4, new double[4] { 0.0, opt.x(0), 100, 0 });
+	matrix* Y = solve_ode(df3, 0.0, 0.01, 7.0, Y0, ud1, opt.x(1));
+
+	// std::cout << hcat(Y[0], Y[1]);
+	test_ss.str("");
+	test_ss << hcat(Y[0], Y[1]);
+	// zapis wynikow do pliku
+	std::ofstream file2("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab3-analiza\\lab3-symulacja.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file2.is_open()) {
+		file2 << test_ss.str();
+		file2.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
 }
 
 void lab4()
