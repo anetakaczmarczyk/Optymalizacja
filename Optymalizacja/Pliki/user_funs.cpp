@@ -158,3 +158,89 @@ matrix ff2R(matrix x, matrix ud1, matrix ud2) {
 
 	return y;
 }
+
+// lab 3 functions
+matrix ff3T_out(matrix x, matrix ud1, matrix ud2) {
+	matrix y;;
+	y = sin(M_PI * sqrt(pow(x(0)/M_PI, 2) + pow(x(1)/M_PI, 2)))/M_PI * sqrt(pow(x(0)/M_PI, 2) + pow(x(1)/M_PI, 2));
+	if( -x(0) + 1 > 0) {
+		y = y + ud2 * pow(-x(0) + 1, 2);
+	}
+	if( -x(1) + 1 > 0) {
+		y = y + ud2 * pow(-x(1) + 1, 2);
+	}
+	if( norm(x) - ud1 > 0) {
+		y = y + ud2 * pow(norm(x) - ud1, 2);
+	}
+	return y;
+}
+matrix ff3T_in(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+	y = sin(M_PI * sqrt(pow(x(0)/M_PI, 2) + pow(x(1)/M_PI, 2)))/M_PI * sqrt(pow(x(0)/M_PI, 2) + pow(x(1)/M_PI, 2));
+	if( -x(0)+1 >=0) {
+		y=1e10;
+	}else {
+		y=y-ud2/(-x(0)+1);
+	}
+	if( -x(1)+1 >=0) {
+		y=1e10;
+	}else {
+		y=y-ud2/(-x(1)+1);
+	}
+	if( norm(x) - ud1 >0) {
+		y=1e10;
+	}else {
+		y=y-ud2/(norm(x) - ud1);
+	}
+	return y;
+}
+
+matrix df3(double t, matrix Y, matrix ud1, matrix ud2) {
+	matrix dY(4,1);
+	double C = ud1(0);
+	double rho = ud1(1);
+	double r = ud1(2);
+	double m = ud1(3);
+	double g = ud1(4);
+
+	double s = M_PI * pow(r, 2);
+	double Dx = 0.5 * C * rho * s * Y(1) * abs(Y(1));
+	double Dy = 0.5 * C * rho * s * Y(3) * abs(Y(3));
+	double Fmx = rho * Y(3) * ud2(0) * M_PI * pow(r, 3);
+	double Fmy = rho * Y(1) * ud2(0) * M_PI * pow(r, 3);
+
+	dY(0) = Y(1);
+	dY(1) = (-Dx - Fmx) / m;
+	dY(2) = Y(3);
+	dY(3) = ((-m * g) - Dy - Fmy) / m;
+
+	return dY;
+}
+
+matrix ff3R(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+	matrix Y0(4, new double[4] {0.0, x(0), 100.0, 0.0});
+	matrix* Y = solve_ode(df3, 0.0, 0.01, 7.0, Y0, ud1, x(1));
+	int n = get_len(Y[0]);
+	int i0 = 0;
+	int i50 = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		if (abs(Y[1](i, 2) - 50.0) < abs(Y[1](i50, 2) - 50.0))
+			i50 = i;
+		if (abs(Y[1](i, 2)) < abs(Y[1](i0, 2)))
+			i0 = i;
+	}
+
+	y = -Y[1](i0, 0);
+
+	if (abs(x(0)) - 10 > 0)
+		y = y + ud2 * pow(abs(x(0)) - 10, 2);
+	if (abs(x(1)) - 15 > 0)
+		y = y + ud2 * pow(abs(x(1)) - 15, 2);
+	if (abs(Y[1](i50, 0) - 5.0) - 0.5 > 0)
+		y = y + ud2 * pow(abs(Y[1](i50, 0) - 5.0) - 0.5, 2);
+
+	return y;
+}

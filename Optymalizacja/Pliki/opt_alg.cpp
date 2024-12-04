@@ -415,22 +415,123 @@ solution Rosen(matrix (*ff)(matrix, matrix, matrix), matrix x0, matrix s0, doubl
 solution pen(matrix (*ff)(matrix, matrix, matrix), matrix x0, double c, double dc, double epsilon, int Nmax, matrix ud1,
              matrix ud2) {
     try {
-        solution Xopt;
-        //Tu wpisz kod funkcji
+        solution XB;
+        XB.x = x0;
+        XB.fit_fun(ff, ud1, c);
 
-        return Xopt;
+        solution XT;
+        XT = XB;
+        double s = ud2(0);
+        double alpha = ud2(1);
+        double beta = ud2(2);
+        double gamma = ud2(3);
+        double delta = ud2(4);
+
+        while(true) {
+            XT = sym_NM(ff, XB.x, s, alpha, beta, gamma, delta, epsilon, Nmax, ud1, c);
+            c*=dc;
+            if(solution::f_calls > Nmax) {
+                XT.flag=0;
+                throw std::string("Za duzo wykonan funkcji");
+            }
+            if (norm(XT.x - XB.x)<epsilon) break;
+            XB=XT;
+        }
+        return XT;
     } catch (string ex_info) {
         throw ("solution pen(...):\n" + ex_info);
     }
 }
 
+double maxW(vector<solution>& sim, int i_min) {
+    double result = 0.0;
+    for (int i = 0; i<sim.size(); i++) {
+        double normal = norm(sim[i_min].x - sim[i].x);
+        result = max(result, normal);
+    }
+    return result;
+}
+
 solution sym_NM(matrix (*ff)(matrix, matrix, matrix), matrix x0, double s, double alpha, double beta, double gamma,
                 double delta, double epsilon, int Nmax, matrix ud1, matrix ud2) {
     try {
-        solution Xopt;
-        //Tu wpisz kod funkcji
+        int n = get_len(x0);
+        matrix d = matrix(n, n);
+        for (int i = 0; i < n; i++) {
+            d(i, i) = 1.0;
+        }
 
-        return Xopt;
+
+        vector<solution> sim;
+        sim.resize(n+1);
+        sim[0].x = x0;
+        sim[0].fit_fun(ff, ud1, ud2);
+
+        for (int i = 1; i < sim.size(); i++) {
+            sim[i].x = sim[0].x + s*d[i-1];
+            sim[i].fit_fun(ff, ud1, ud2);
+        }
+        int i_min{};
+        int i_max{};
+        while(maxW(sim, i_min)>=epsilon) {
+            i_min =0;
+            i_max =0;
+            for (int j = 1; j < sim.size(); j++) {
+                if(sim[j].y < sim[i_min].y) {
+                    i_min = j;
+                }
+                if(sim[j].y > sim[i_max].y) {
+                    i_max = j;
+                }
+            }
+            matrix sim_SrC{};
+            for (int i=0; i<sim.size(); i++) {
+                if (i==i_max)
+                    continue;
+                sim_SrC = sim_SrC + sim[i].x;
+            }
+            sim_SrC = sim_SrC / sim.size();
+
+            solution sim_reflected{};
+            sim_reflected.x = sim_SrC + alpha * (sim_SrC - sim[i_max].x);
+            sim_reflected.fit_fun(ff, ud1, ud2);
+
+            if(sim_reflected.y < sim[i_max].y) {
+                solution sim_expansion{};
+                sim_expansion.x = sim_SrC + gamma * (sim_reflected.x - sim_SrC);
+                sim_expansion.fit_fun(ff, ud1, ud2);
+                if(sim_expansion.y < sim_reflected.y) {
+                    sim[i_max] = sim_expansion;
+                }
+                else {
+                    sim[i_max] = sim_reflected;
+                }
+            } else {
+                if (sim[i_min].y <= sim_reflected.y && sim_reflected.y < sim[i_max].y ) {
+                    sim[i_max] = sim_reflected;
+                } else {
+                    solution sim_narrowed{};
+                    sim_narrowed.x = sim_SrC + beta * (sim[i_max].x - sim_SrC);
+                    sim_narrowed.fit_fun(ff, ud1, ud2);
+                    if (sim_narrowed.y >= sim[i_max].y) {
+                        for (int i = 0; i<sim.size(); i++) {
+                            if (i==i_min)
+                                continue;
+                            sim[i].x = delta * (sim[i].x + sim[i_min].x);
+                            sim[i].fit_fun(ff, ud1, ud2);
+                        }
+                    }else {
+                        sim[i_max] = sim_narrowed;
+                    }
+                }
+            }
+            if(solution::f_calls > Nmax) {
+                sim[i_min].flag=0;
+                throw std::string("Za duzo wykonan funkcji");
+            }
+
+         }
+        return sim[i_min];
     } catch (string ex_info) {
         throw ("solution sym_NM(...):\n" + ex_info);
     }
