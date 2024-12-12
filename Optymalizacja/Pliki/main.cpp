@@ -23,7 +23,7 @@ int main()
 {
 	try
 	{
-		lab3();
+		lab4();
 	}
 	catch (string EX_INFO)
 	{
@@ -424,7 +424,147 @@ void lab3()
 
 void lab4()
 {
+	double epsilon = 1e-4;
+	int Nmax = 10000;
+	solution test_opt;
 
+	std::stringstream test_ss;	// do zapisu danych
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> x0_dist(-10.0, 10.0);
+
+
+	// double list[] = {0.05, 0.12, 0.0};
+	// // dla 3 różnych krokow: 0.05, 0.12, zmiennokrokowe
+	// for (int j = 0; j < 3; j++) {
+	// 	for (int i = 0; i < 100; ++i)
+	// 	{
+	// 		matrix x0 = matrix(2, new double[2] {x0_dist(gen), x0_dist(gen)});
+	// 		//zapis do stringa: x1; x2 wygenerowane
+	// 		test_ss << x0(0) << ";" << x0(1) << ";";
+	// 		test_opt = SD(ff4T, gfT, x0, list[j], epsilon, Nmax);
+	// 		// zapis do stringa: x1; x2; y; f_calls; g_calls;
+	// 		test_ss << test_opt.x(0) << ";"<< test_opt.x(1) << ";"<< test_opt.y(0) << ";" << test_opt.f_calls  << ";"<< test_opt.g_calls << ";";
+	// 		solution::clear_calls();
+	//
+	// 		test_opt = CG(ff4T, gfT, x0, list[j], epsilon, Nmax);
+	// 		// zapis do stringa: x1; x2; y; f_calls; g_calls;
+	// 		test_ss << test_opt.x(0) << ";"<< test_opt.x(1) << ";"<< m2d(test_opt.y) << ";" << test_opt.f_calls  << ";"<< test_opt.g_calls << ";";
+	// 		solution::clear_calls();
+	//
+	// 		test_opt = Newton(ff4T, gfT, hfT, x0, list[j], epsilon, Nmax);
+	// 		// zapis do stringa: x1; x2; y; f_calls; g_calls, h_calls;
+	// 		test_ss << test_opt.x(0) << ";"<< test_opt.x(1) << ";"<< m2d(test_opt.y) << ";" << test_opt.f_calls  << ";"<< test_opt.g_calls << ";"<< test_opt.H_calls << ";\n";
+	// 		solution::clear_calls();
+	// 	}
+	// }
+	//
+	// // zapis wynikow do pliku
+	// std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-100-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	// if (file3.is_open()) {
+	// 	file3 << test_ss.str();
+	// 	file3.close();
+	// }else {
+	// 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	// }
+	//
+	// std::cout << "Wyniki:\n";
+	// std::cout << test_ss.str() << std::endl;
+
+	//pobieranie po każdej iteracji
+
+	// zapis wynikow do pliku
+	matrix x0 = matrix(2, new double[2] {-4.93, 4.44});
+	// test_opt = SD(ff4T, gfT, x0, 0.05, epsilon, Nmax);
+	// test_opt = SD(ff4T, gfT, x0, 0.12, epsilon, Nmax);
+	// test_opt = SD(ff4T, gfT, x0, 0.0, epsilon, Nmax);
+
+	// test_opt = CG(ff4T, gfT, x0, 0.05, epsilon, Nmax);
+	// test_opt = CG(ff4T, gfT, x0, 0.12, epsilon, Nmax);
+	// test_opt = CG(ff4T, gfT, x0, 0.0, epsilon, Nmax);
+
+	// test_opt = Newton(ff4T, gfT, hfT, x0, 0.05, epsilon, Nmax);
+	// test_opt = Newton(ff4T, gfT, hfT, x0, 0.12, epsilon, Nmax);
+	// test_opt = Newton(ff4T, gfT, hfT, x0, 0.0, epsilon, Nmax);
+
+
+	//Rzeczywista
+	// //otwieranie i pobieranie danych z pliku
+	ifstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\Pliki\\XData.txt");
+	if (!file.is_open()) {
+		throw string("Nie mo¿na otworzyæ pliku: ");
+	}
+	matrix resultX = matrix(3, 100);
+	string line;
+	int i = 0;
+	while (getline(file, line)) {
+		int j = 0;
+		istringstream ss(line);
+		string value;
+		while (ss >> value) {
+			resultX(i, j) = stod(value);
+			j++;
+		}
+		i++;
+	}
+
+	ifstream file2("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\Pliki\\YData.txt");
+	if (!file2.is_open()) {
+		throw string("Nie mo¿na otworzyæ pliku: ");
+	}
+	matrix resultY = matrix(1, 100);
+	i = 0;
+	while (getline(file2, line)) {
+		int j = 0;
+		istringstream ss(line);
+		string value;
+		while (ss >> value) {
+			resultY(i, j) = stod(value);
+			j++;
+		}
+		i++;
+	}
+	std::stringstream test_przyjeto;
+	std::stringstream test_nieprzyjeto;
+	double length[] = {0.01, 0.001, 0.0001};
+	for (int k =0; k <3; k++) {
+		cout << "Dlugosc kroku: " << length[k] << endl;
+		matrix theta_start = matrix(3, new double[3]{0.0, 0.0, 0.0});
+		solution theta_opt = CG(ff4R, gf4R, theta_start, length[k], epsilon, Nmax, resultX, resultY);
+		std::cout << theta_opt;
+
+		int propabiliy = 0;
+		for (int i = 0; i < 100; i++) {
+			matrix currX = resultX[i];
+			matrix currY = resultY[i];
+			double calcVal = sygmoid(theta_opt.x, currX);
+			if (round(calcVal) == currY) {
+				propabiliy++;
+				test_przyjeto << currX(1) << ";" << currX(2) << ";\n";
+			}else {
+				test_nieprzyjeto << currX(1) << ";" << currX(2) << ";\n";
+			}
+		}
+			test_przyjeto << "\n\n";
+			test_nieprzyjeto << "\n\n";
+		cout << "P: " << propabiliy << "\n\n";
+		solution::clear_calls();
+	}
+	// cout << test_nieprzyjeto.str();
+	std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\przyjeto.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file3.is_open()) {
+		file3 << test_przyjeto.str();
+		file3.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
+	std::ofstream file4("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\nieprzyjeto.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file4.is_open()) {
+		file4 << test_nieprzyjeto.str();
+		file4.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
 }
 
 void lab5()

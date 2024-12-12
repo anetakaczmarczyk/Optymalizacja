@@ -22,3 +22,11 @@ matrix df3(double, matrix, matrix = NAN, matrix = NAN);
 matrix ff3T_out(matrix, matrix = NAN, matrix = NAN);
 matrix ff3T_in(matrix, matrix = NAN, matrix = NAN);
 matrix ff3R(matrix, matrix = NAN, matrix = NAN);
+
+//lab 4
+matrix ff4T(matrix x, matrix ud1= NAN, matrix ud2= NAN);
+matrix gfT(matrix x, matrix ud1= NAN, matrix ud2= NAN);
+matrix hfT(matrix x, matrix ud1= NAN, matrix ud2= NAN);
+matrix ff4R(matrix theta, matrix X= NAN, matrix Y= NAN);
+matrix gf4R(matrix theta, matrix X= NAN, matrix Y= NAN);
+double sygmoid(matrix theta, matrix x);

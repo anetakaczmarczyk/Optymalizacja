@@ -540,10 +540,51 @@ solution sym_NM(matrix (*ff)(matrix, matrix, matrix), matrix x0, double s, doubl
 solution SD(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, matrix), matrix x0, double h0,
             double epsilon, int Nmax, matrix ud1, matrix ud2) {
     try {
-        solution Xopt;
-        //Tu wpisz kod funkcji
-
-        return Xopt;
+        std::stringstream test_ss;
+        solution Xopt, D;
+        Xopt.x = x0;
+        D = Xopt;
+        matrix d(2, 1);
+        while(true) {
+            test_ss << Xopt.x(0) << ";" << Xopt.x(1) << ";\n";
+            Xopt.grad(gf, ud1, ud2);
+            d = -Xopt.g;
+            if (h0<=0) {
+                matrix h_data(2, 2);
+                h_data.set_col(Xopt.x, 0);
+                h_data.set_col(d, 1);
+                solution H = golden(ff, 0, 1, epsilon, Nmax, ud1, h_data);
+                solution::f_calls = 0;
+                D.x = D.x + H.x * d;
+            }else
+                D.x = D.x + h0 * d;
+            if(solution::g_calls > Nmax) {
+                // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-12SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+                // if (file3.is_open()) {
+                //     file3 << test_ss.str();
+                //     file3.close();
+                // }else {
+                //     cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+                // }
+                D.fit_fun(ff, ud1, ud2);
+                return D;
+                throw std::string("Za duzo wykonan funkcji");
+            }
+            if (norm(D.x - Xopt.x) <= epsilon)
+                break;
+            Xopt = D;
+        }
+        // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-05SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-12SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkSD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        if (file3.is_open()) {
+            file3 << test_ss.str();
+            file3.close();
+        }else {
+            cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        }
+        D.fit_fun(ff, ud1, ud2);
+        return D;
     } catch (string ex_info) {
         throw ("solution SD(...):\n" + ex_info);
     }
@@ -552,9 +593,46 @@ solution SD(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
 solution CG(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, matrix), matrix x0, double h0,
             double epsilon, int Nmax, matrix ud1, matrix ud2) {
     try {
-        solution Xopt;
-        //Tu wpisz kod funkcji
+        // std::stringstream test_ss;
+        solution Xopt, Xp;
+        Xopt = x0;
+        Xopt.grad(gf, ud1, ud2);
+        matrix d = -Xopt.g;
+        matrix di;
+        do {
+            // test_ss << Xopt.x(0) << ";" << Xopt.x(1) << ";\n";
+            Xp = Xopt;
+            d = di;
+            Xopt.grad(gf, ud1, ud2);
+            double beta = pow(norm(Xopt.g),2) / pow(norm(Xp.g),2);
+            di = -Xopt.g + beta * d;
+            if (h0<=0) {
+                matrix h_data(2, 2);
+                h_data.set_col(Xp.x, 0);
+                h_data.set_col(di, 1);
+                solution H = golden(ff, 0, 1, epsilon, Nmax, ud1, h_data);
+                solution::f_calls = 0;
+                matrix h = H.x;
+                Xopt.x = Xp.x + h * di;
+            }else {
+                Xopt.x = Xp.x + h0 * di;
+            }
+            if(solution::g_calls > Nmax) {
+                Xopt.fit_fun(ff, ud1, ud2);
+                return Xopt;
+                throw std::string("Za duzo wykonan funkcji");
+            }
 
+        }
+        while(norm(Xopt.x - Xp.x) > epsilon);
+        // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkCG.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        // if (file3.is_open()) {
+        //     file3 << test_ss.str();
+        //     file3.close();
+        // }else {
+        //     cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        // }
+        Xopt.fit_fun(ff, ud1, ud2);
         return Xopt;
     } catch (string ex_info) {
         throw ("solution CG(...):\n" + ex_info);
@@ -565,9 +643,42 @@ solution Newton(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matri
                 matrix (*Hf)(matrix, matrix, matrix), matrix x0, double h0, double epsilon, int Nmax, matrix ud1,
                 matrix ud2) {
     try {
-        solution Xopt;
-        //Tu wpisz kod funkcji
+        std::stringstream test_ss;
+        solution Xopt, D;
+        D.x = x0;
+        Xopt = D;
+        matrix d;
+        while(true) {
+            test_ss << Xopt.x(0) << ";" << Xopt.x(1) << ";\n";
+            D.grad(gf, ud1, ud2);
+            D.hess(Hf, ud1, ud2);
+            d = -inv(D.H) * D.g;
+            if (h0<=0) {
+                matrix h_data(2, 2);
+                h_data.set_col(D.x, 0);
+                h_data.set_col(d, 1);
+                solution H = golden(ff, 0, 1, epsilon, Nmax, ud1, h_data);
+                solution::f_calls = 0;
+                Xopt.x = D.x + H.x * d;
+            }else
+                Xopt.x = D.x + h0 * d;
+            if(solution::g_calls > Nmax) {
+                throw std::string("Za duzo wykonan funkcji");
+            }
+            if(norm(Xopt.x - D.x) <= epsilon) {
+                break;
+            }
+            D = Xopt;
 
+        }
+        std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkNewton.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        if (file3.is_open()) {
+            file3 << test_ss.str();
+            file3.close();
+        }else {
+            cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        }
+        Xopt.fit_fun(ff, ud1, ud2);
         return Xopt;
     } catch (string ex_info) {
         throw ("solution Newton(...):\n" + ex_info);
@@ -578,8 +689,35 @@ solution golden(matrix (*ff)(matrix, matrix, matrix), double a, double b, double
                 matrix ud2) {
     try {
         solution Xopt;
-        //Tu wpisz kod funkcji
+        double alpha = (pow(5,0.5)-1) / 2;
+        double a0 = a;
+        double b0 = b;
+        double c0 = b0 - alpha*(b0 - a0);
+        double d0 = a0 + alpha*(b0 - a0);
+        do {
+            solution fc, fd;
+            fc.x = c0;
+            fd.x = d0;
+            fc.fit_fun(ff, ud1, ud2);
+            fd.fit_fun(ff, ud1, ud2);
 
+            if(fc.y < fd.y) {
+                b0 = d0;
+                d0 = c0;
+                c0 = b0 - alpha*(b0 - a0);
+            }else {
+                a0 = c0;
+                c0 = d0;
+                d0 = a0 + alpha*(b0 - a0);
+            }
+            if(solution::f_calls > Nmax) {
+                throw std::string("Za duzo wykonan funkcji");
+            }
+
+        }
+        while(b0-a0>=epsilon);
+
+        Xopt.x = (a0 + b0)/2;
         return Xopt;
     } catch (string ex_info) {
         throw ("solution golden(...):\n" + ex_info);
