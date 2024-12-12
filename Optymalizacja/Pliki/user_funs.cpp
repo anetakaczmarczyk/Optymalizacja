@@ -244,3 +244,59 @@ matrix ff3R(matrix x, matrix ud1, matrix ud2) {
 
 	return y;
 }
+
+matrix ff4T(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+	if (isnan(ud2(0, 0))) {
+		y = pow(x(0) + 2 * x(1) - 7, 2) + pow(2*x(0)+x(1)-5,2);
+	}else {
+		y = ff4T(ud2[0] + x * ud2[1]);
+	}
+	return y;
+}
+
+matrix gfT(matrix x, matrix ud1, matrix ud2) {
+	matrix y(2, 1);
+	y(0) = -34.0 + 10.0 * x(0) + 8.0 * x(1);
+	y(1) = -34.0 + 8.0 * x(0) + 10.0 * x(1);
+	return y;
+}
+
+matrix hfT(matrix x, matrix ud1, matrix ud2) {
+	matrix y(2, 2);
+	y(0, 0) = 10;
+	y(0, 1) = 8;
+	y(1, 0) = 8;
+	y(1, 1) = 10;
+	return y;
+}
+
+double sygmoid(matrix theta, matrix x) {
+	return 1.0/(1.0 + exp(-1.0 * m2d(trans(theta)*x)));
+}
+
+matrix ff4R(matrix theta, matrix X, matrix Y) {
+	matrix y;
+	double sum = 0.0;
+	for (int i = 0; i < 100; i++) {
+		double yi = Y[i](0);
+		matrix xi = X[i];
+		sum += yi * log(sygmoid(theta, xi)) + (1.0 - yi) * log(1.0 - sygmoid(theta, xi));
+	}
+	y = (-1.0/100.0) * sum;
+	return y;
+}
+
+matrix gf4R(matrix theta, matrix X, matrix Y) {
+	matrix y(3,1);
+	for(int i = 0; i<3; i++) {
+		double sum = 0.0;
+		for (int j =0; j<100; j++) {
+			double yi = Y[j](0);
+			matrix xi = X[j];
+			sum += (sygmoid(theta, xi) - yi) * xi(i);
+		}
+		y(i) = (1.0/100.0) * sum;
+	}
+	return y;
+}
