@@ -559,7 +559,7 @@ solution SD(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
             }else
                 D.x = D.x + h0 * d;
             if(solution::g_calls > Nmax) {
-                // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-12SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+                // std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-zkSD.txt)");
                 // if (file3.is_open()) {
                 //     file3 << test_ss.str();
                 //     file3.close();
@@ -574,15 +574,16 @@ solution SD(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
                 break;
             Xopt = D;
         }
+        // std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-zkSD.txt)");
         // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-05SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
         // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-12SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-        std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkSD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-        if (file3.is_open()) {
-            file3 << test_ss.str();
-            file3.close();
-        }else {
-            cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-        }
+        // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkSD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        // if (file3.is_open()) {
+        //     file3 << test_ss.str();
+        //     file3.close();
+        // }else {
+        //     cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        // }
         D.fit_fun(ff, ud1, ud2);
         return D;
     } catch (string ex_info) {
@@ -593,14 +594,14 @@ solution SD(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
 solution CG(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, matrix), matrix x0, double h0,
             double epsilon, int Nmax, matrix ud1, matrix ud2) {
     try {
-        // std::stringstream test_ss;
+        std::stringstream test_ss;
         solution Xopt, Xp;
         Xopt = x0;
         Xopt.grad(gf, ud1, ud2);
         matrix d = -Xopt.g;
         matrix di;
         do {
-            // test_ss << Xopt.x(0) << ";" << Xopt.x(1) << ";\n";
+            test_ss << Xopt.x(0) << ";" << Xopt.x(1) << ";\n";
             Xp = Xopt;
             d = di;
             Xopt.grad(gf, ud1, ud2);
@@ -625,13 +626,14 @@ solution CG(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
 
         }
         while(norm(Xopt.x - Xp.x) > epsilon);
+        std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-zkCG.txt)");
         // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkCG.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-        // if (file3.is_open()) {
-        //     file3 << test_ss.str();
-        //     file3.close();
-        // }else {
-        //     cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-        // }
+        if (file3.is_open()) {
+            file3 << test_ss.str();
+            file3.close();
+        }else {
+            cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        }
         Xopt.fit_fun(ff, ud1, ud2);
         return Xopt;
     } catch (string ex_info) {
@@ -671,7 +673,8 @@ solution Newton(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matri
             D = Xopt;
 
         }
-        std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkNewton.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-zkNewton.txt)");
+        // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkNewton.txt"); //musialam dac cala sciezke bo nie dzialalo xd
         if (file3.is_open()) {
             file3 << test_ss.str();
             file3.close();

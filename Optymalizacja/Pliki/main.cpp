@@ -432,7 +432,7 @@ void lab4()
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> x0_dist(-10.0, 10.0);
 
-
+	//
 	// double list[] = {0.05, 0.12, 0.0};
 	// // dla 3 różnych krokow: 0.05, 0.12, zmiennokrokowe
 	// for (int j = 0; j < 3; j++) {
@@ -459,7 +459,7 @@ void lab4()
 	// }
 	//
 	// // zapis wynikow do pliku
-	// std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-100-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	// std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-100-optymalizacji.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
 	// if (file3.is_open()) {
 	// 	file3 << test_ss.str();
 	// 	file3.close();
@@ -550,10 +550,10 @@ void lab4()
 		solution::clear_calls();
 	}
 	// cout << test_nieprzyjeto.str();
-	std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\przyjeto.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-	if (file3.is_open()) {
-		file3 << test_przyjeto.str();
-		file3.close();
+	std::ofstream file5("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\przyjeto.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file5.is_open()) {
+		file5 << test_przyjeto.str();
+		file5.close();
 	}else {
 		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
 	}

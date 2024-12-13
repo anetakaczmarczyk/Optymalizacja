@@ -258,7 +258,7 @@ matrix ff4T(matrix x, matrix ud1, matrix ud2) {
 matrix gfT(matrix x, matrix ud1, matrix ud2) {
 	matrix y(2, 1);
 	y(0) = -34.0 + 10.0 * x(0) + 8.0 * x(1);
-	y(1) = -34.0 + 8.0 * x(0) + 10.0 * x(1);
+	y(1) = -38.0 + 8.0 * x(0) + 10.0 * x(1);
 	return y;
 }
 
