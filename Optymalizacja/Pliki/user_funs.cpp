@@ -300,3 +300,55 @@ matrix gf4R(matrix theta, matrix X, matrix Y) {
 	}
 	return y;
 }
+
+matrix ff5T(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+	if (isnan(ud2(0, 0))) {
+		y=matrix(2, 1);
+		y(0) = ud1(1)* (pow(x(0)-2, 2) + pow(x(1) - 2, 2));
+		y(1) = 1/ud1(1) * (pow(x(0)+2, 2) + pow(x(1) + 2, 2));
+
+	} else {
+		matrix yt;
+		yt = ff5T(ud2[0]+x*ud2[1], ud1);
+		y = ud1(0) * yt(0) + (1-ud1(0))*yt(1);
+	}
+	return y;
+}
+
+matrix ff5R(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+
+	double rho = 7800;
+	double P = 1000;
+	double E = 207e9;
+
+	if (isnan(ud2(0, 0))) {
+		double l = x(0);
+		double d = x(1);
+		y = matrix(3, 1);
+		y(0) = rho * l * M_PI * (pow(d,2) / 4);
+		y(1) = (64 * P * pow(l, 3)) / (3 * E * M_PI * pow(d, 4));
+		y(2) = (32 * P * l)/(M_PI * pow(d, 3));
+	}
+	else
+	{
+		matrix xt = ud2[0] + x * ud2[1];
+
+		matrix yt = ff5R(xt, ud1);
+		y = ud1 * (yt(0) - 0.12) / (15.3 - 0.12) + (1 - ud1) * (yt(1) - 4.2e-5) / (3.28 - 4.2e-5);
+
+		const double c = 1e10;
+
+		if (xt(0) < 0.2) y = y + c * pow(0.2 - xt(0), 2);
+		if (xt(0) > 1) y = y + c * pow(xt(0) - 1, 2);
+		if (xt(1) < 0.01) y = y + c * pow(0.01 - xt(1), 2);
+		if (xt(1) > 0.05) y = y + c * pow(xt(1) - 0.05, 2);
+		if (xt(1) > 0.005) y = y + c * pow(xt(1) - 0.005, 2);
+
+		if (yt(1) > 0.005) y = y + c * pow(yt(1) - 0.005, 2);
+		if (yt(2) > 300e6) y = y + c * pow(yt(2) - 300e6, 2);
+	}
+	return y;
+}
+
