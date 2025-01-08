@@ -30,7 +30,6 @@ double *expansion(matrix (*ff)(matrix, matrix, matrix), double x0, double d, dou
         int i = 0;
         solution xi_sol, xi_next_sol;
         double xi, xi_next;
-
         xi = x0;
         xi_next = xi + d;
 
@@ -730,8 +729,42 @@ solution golden(matrix (*ff)(matrix, matrix, matrix), double a, double b, double
 solution Powell(matrix (*ff)(matrix, matrix, matrix), matrix x0, double epsilon, int Nmax, matrix ud1, matrix ud2) {
     try {
         solution Xopt;
-        //Tu wpisz kod funkcji
+        int n = get_len(x0);
+        matrix d = ident_mat(n);
+        matrix a(n, 2);
 
+        solution X, p, h;
+        X = x0;
+        double* s;
+
+        while (solution::f_calls <= Nmax) {
+            p = X;
+            for (int j=0; j<n; j++) {
+                a.set_col(p.x, 0);
+                a.set_col(d[j], 1);
+                s = expansion(ff, 0, 1, 1.2, Nmax, ud1, a);
+
+                h = golden(ff, s[0], s[1], epsilon, Nmax, ud1, a);
+                p.x = p.x + h.x * d[j];
+            }
+
+            if (norm(p.x - X.x) < epsilon) {
+                Xopt = p;
+                break;
+            }
+            for (int j=0; j<n-1; j++) {
+                d.set_col(d[j+1], j);
+            }
+            d.set_col(p.x - X.x, n-1);
+            a.set_col(p.x, 0);
+            a.set_col(d[n-1], 1);
+            s = expansion(ff, 0, 1, 1.2, Nmax, ud1, a);
+            h = golden(ff, s[0], s[1], epsilon, Nmax, ud1, a);
+            p.x = p.x + h.x * d[n-1];
+            X = p;
+            Xopt = X;
+        }
+        Xopt.fit_fun(ff, ud1, ud2);
         return Xopt;
     } catch (string ex_info) {
         throw ("solution Powell(...):\n" + ex_info);

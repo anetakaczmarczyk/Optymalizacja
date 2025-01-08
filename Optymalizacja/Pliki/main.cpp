@@ -23,7 +23,7 @@ int main()
 {
 	try
 	{
-		lab4();
+		lab5();
 	}
 	catch (string EX_INFO)
 	{
@@ -568,7 +568,74 @@ void lab4()
 
 void lab5()
 {
+	double epsilon = 1e-4;
+	int Nmax = 10000;
+	solution test_opt;
 
+	std::stringstream test_ss;	// do zapisu danych
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> x0_dist(-10.0, 10.0);
+
+
+	double list[] = {1, 10, 100};
+	// // dla 3 różnych a: 1, 10, 100
+
+	for (double i = 0.0; i<= 1.01; i += 0.01)
+	{
+		matrix x0 = matrix(2, new double[2] {x0_dist(gen), x0_dist(gen)});
+		//zapis do stringa: x1; x2 wygenerowane
+		test_ss << x0(0) << ";" << x0(1) << ";";
+
+		for (int j = 0; j < 3; j++) {
+			matrix ud1 = matrix(2, new double[2] {i, list[j]});
+
+			test_opt = Powell(ff5T, x0, epsilon, Nmax, ud1);
+			// zapis do stringa: x1; x2; f1; f2; f_calls;
+			test_ss << test_opt.x(0) << ";"<< test_opt.x(1) << ";"<< test_opt.y(0) << ";" << test_opt.y(1) << ";" << test_opt.f_calls  << ";";
+			solution::clear_calls();
+		}
+		test_ss << "\n";
+	}
+
+	// // zapis wynikow do pliku
+	std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-101-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file3.is_open()) {
+		file3 << test_ss.str();
+		file3.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
+
+	test_ss.str("");
+	test_ss.clear();
+
+	//rzeczywisty
+	matrix ud1(1);
+	std::uniform_real_distribution<> genL(0.2, 1);
+	std::uniform_real_distribution<> genD(0.01, 0.05);
+
+	for (double w = 0.0; w <= 1.01; w += 0.01)
+	{
+		ud1(0) = w;
+		matrix x0 = matrix(2, new double[2] {genL(gen), genD(gen)});
+
+		test_opt = Powell(ff5R, x0, epsilon, Nmax, ud1);
+
+		test_ss << x0(0) << ";" << x0(1) << ";";
+		// zapis do stringa: l*, d*, masa*, ugiecie*, f_calls;
+		test_ss << test_opt.x(0) * 1000 << ";"<< test_opt.x(1) * 1000 << ";"<< test_opt.y(0) * 1000 << ";" << test_opt.y(1) * 1000 << ";" << test_opt.f_calls  << "\n";
+		solution::clear_calls();
+	}
+
+
+	std::ofstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-symulacja.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file.is_open()) {
+		file << test_ss.str();
+		file.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
 }
 
 void lab6()

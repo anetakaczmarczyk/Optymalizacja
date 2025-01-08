@@ -30,3 +30,7 @@ matrix hfT(matrix x, matrix ud1= NAN, matrix ud2= NAN);
 matrix ff4R(matrix theta, matrix X= NAN, matrix Y= NAN);
 matrix gf4R(matrix theta, matrix X= NAN, matrix Y= NAN);
 double sygmoid(matrix theta, matrix x);
+
+//lab 5
+matrix ff5T(matrix x, matrix ud1= NAN, matrix ud2= NAN);
+matrix ff5R(matrix x, matrix ud1= NAN, matrix ud2= NAN);
