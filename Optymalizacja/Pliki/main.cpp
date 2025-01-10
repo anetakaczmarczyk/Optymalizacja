@@ -623,7 +623,7 @@ void lab5()
 
 		test_ss << x0(0) << ";" << x0(1) << ";";
 		// zapis do stringa: l*, d*, masa*, ugiecie*, f_calls;
-		test_ss << test_opt.x(0) * 1000 << ";"<< test_opt.x(1) * 1000 << ";"<< test_opt.y(0) * 1000 << ";" << test_opt.y(1) * 1000 << ";" << test_opt.f_calls  << "\n";
+		test_ss << test_opt.x(0) * 1000 << ";"<< test_opt.x(1) * 1000 << ";"<< test_opt.y(0) << ";" << test_opt.y(1) * 1000 << ";" << test_opt.f_calls  << "\n";
 		solution::clear_calls();
 	}
 
