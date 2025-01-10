@@ -343,8 +343,6 @@ matrix ff5R(matrix x, matrix ud1, matrix ud2) {
 		if (xt(0) < 0.2) y = y + c * pow(0.2 - xt(0), 2);
 		if (xt(0) > 1) y = y + c * pow(xt(0) - 1, 2);
 		if (xt(1) < 0.01) y = y + c * pow(0.01 - xt(1), 2);
-		if (xt(1) > 0.05) y = y + c * pow(xt(1) - 0.05, 2);
-		if (xt(1) > 0.005) y = y + c * pow(xt(1) - 0.005, 2);
 
 		if (yt(1) > 0.005) y = y + c * pow(yt(1) - 0.005, 2);
 		if (yt(2) > 300e6) y = y + c * pow(yt(2) - 300e6, 2);

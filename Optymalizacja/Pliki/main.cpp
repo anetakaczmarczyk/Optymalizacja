@@ -568,7 +568,7 @@ void lab4()
 
 void lab5()
 {
-	double epsilon = 1e-4;
+	double epsilon = 1e-3;
 	int Nmax = 10000;
 	solution test_opt;
 
@@ -599,7 +599,7 @@ void lab5()
 	}
 
 	// // zapis wynikow do pliku
-	std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-101-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file3("C:\\Users\\aneta\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-101-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file3.is_open()) {
 		file3 << test_ss.str();
 		file3.close();
@@ -619,7 +619,6 @@ void lab5()
 	{
 		ud1(0) = w;
 		matrix x0 = matrix(2, new double[2] {genL(gen), genD(gen)});
-
 		test_opt = Powell(ff5R, x0, epsilon, Nmax, ud1);
 
 		test_ss << x0(0) << ";" << x0(1) << ";";
@@ -629,7 +628,7 @@ void lab5()
 	}
 
 
-	std::ofstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-symulacja.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file("C:\\Users\\aneta\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-symulacja.txt"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file.is_open()) {
 		file << test_ss.str();
 		file.close();
