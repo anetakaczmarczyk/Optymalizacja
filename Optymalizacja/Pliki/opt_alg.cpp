@@ -239,9 +239,9 @@ solution HJ(matrix (*ff)(matrix, matrix, matrix), matrix x0, double s, double al
         solution XB, X;
         XB.x = x0;
         XB.fit_fun(ff, ud1, ud2);
-        // std::stringstream HJ_ss; // do zapisu danych
+        std::stringstream HJ_ss; // do zapisu danych
         while (s > epsilon) {
-             // HJ_ss << m2d(XB.x(0)) << ";" <<  m2d(XB.x(1))<< ";\n";
+            HJ_ss << m2d(XB.x(0)) << ";" <<  m2d(XB.x(1))<< ";\n";
             X = HJ_trial(ff, XB, s, ud1, ud2);
             if (X.y < XB.y) {
                 do {
@@ -264,13 +264,13 @@ solution HJ(matrix (*ff)(matrix, matrix, matrix), matrix x0, double s, double al
             }
         }
         // zapis wynikow do pliku
-        // std::ofstream file(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab2-analiza\lab2-HJ-przyklad.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
-        // if (file.is_open()) {
-        // 	file << HJ_ss.str();
-        // 	file.close();
-        // }else {
-        // 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-        // }
+        std::ofstream file(R"(C:\Users\Ania\CLionProjects\Optymalizacja\Optymalizacja\lab2-analiza\lab2-HJ-przyklad.txt)");
+        if (file.is_open()) {
+        	file << HJ_ss.str();
+        	file.close();
+        }else {
+        	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        }
         return X;
     } catch (string ex_info) {
         throw ("solution HJ(...):\n" + ex_info);
@@ -326,7 +326,7 @@ solution Rosen(matrix (*ff)(matrix, matrix, matrix), matrix x0, matrix s0, doubl
         solution Xopt;
         //Tu wpisz kod funkcji
         int n = get_len(x0);
-        // std::stringstream Rosen_ss; // do zapisu danych
+        std::stringstream Rosen_ss; // do zapisu danych
         matrix e = matrix(n, n);
         for (int i = 0; i < n; i++) {
             e(i, i) = 1.0;
@@ -341,7 +341,7 @@ solution Rosen(matrix (*ff)(matrix, matrix, matrix), matrix x0, matrix s0, doubl
         XB.x = x0;
         XB.fit_fun(ff, ud1, ud2);
         while (max(s) > epsilon) {
-            // Rosen_ss << m2d(XB.x(0)) << ";" <<  m2d(XB.x(1))<< ";\n";
+            Rosen_ss << m2d(XB.x(0)) << ";" <<  m2d(XB.x(1))<< ";\n";
             for (int j = 0; j < n; j++) {
                 solution temp;
                 temp.x = XB.x + s(j) * e[j];
@@ -397,14 +397,14 @@ solution Rosen(matrix (*ff)(matrix, matrix, matrix), matrix x0, matrix s0, doubl
         //zaimplementowac w 2D
 
         // zapis wynikow do pliku
-    //     std::ofstream file(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab2-analiza\lab2-Rosen-przyklad.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
-    //     if (file.is_open()) {
-    //         file << Rosen_ss.str();
-    //         file.close();
-    //     }else {
-    //         cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-    //     }
-    //
+        std::ofstream file(R"(C:\Users\Ania\CLionProjects\Optymalizacja\Optymalizacja\lab2-analiza\lab2-Rosen-przyklad.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
+        if (file.is_open()) {
+            file << Rosen_ss.str();
+            file.close();
+        }else {
+            cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        }
+
         return Xopt;
     } catch (string ex_info) {
         throw ("solution Rosen(...):\n" + ex_info);
@@ -558,7 +558,7 @@ solution SD(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
             }else
                 D.x = D.x + h0 * d;
             if(solution::g_calls > Nmax) {
-                // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-12SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+                // std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-zkSD.txt)");
                 // if (file3.is_open()) {
                 //     file3 << test_ss.str();
                 //     file3.close();
@@ -573,15 +573,16 @@ solution SD(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
                 break;
             Xopt = D;
         }
+        // std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-zkSD.txt)");
         // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-05SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
         // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-12SD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-        std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkSD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-        if (file3.is_open()) {
-            file3 << test_ss.str();
-            file3.close();
-        }else {
-            cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-        }
+        // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkSD.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        // if (file3.is_open()) {
+        //     file3 << test_ss.str();
+        //     file3.close();
+        // }else {
+        //     cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        // }
         D.fit_fun(ff, ud1, ud2);
         return D;
     } catch (string ex_info) {
@@ -592,14 +593,14 @@ solution SD(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
 solution CG(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, matrix), matrix x0, double h0,
             double epsilon, int Nmax, matrix ud1, matrix ud2) {
     try {
-        // std::stringstream test_ss;
+        std::stringstream test_ss;
         solution Xopt, Xp;
         Xopt = x0;
         Xopt.grad(gf, ud1, ud2);
         matrix d = -Xopt.g;
         matrix di;
         do {
-            // test_ss << Xopt.x(0) << ";" << Xopt.x(1) << ";\n";
+            test_ss << Xopt.x(0) << ";" << Xopt.x(1) << ";\n";
             Xp = Xopt;
             d = di;
             Xopt.grad(gf, ud1, ud2);
@@ -624,13 +625,14 @@ solution CG(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matrix, m
 
         }
         while(norm(Xopt.x - Xp.x) > epsilon);
+        std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-zkCG.txt)");
         // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkCG.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-        // if (file3.is_open()) {
-        //     file3 << test_ss.str();
-        //     file3.close();
-        // }else {
-        //     cerr << "Nie udało się otworzyć pliku do zapisu.\n";
-        // }
+        if (file3.is_open()) {
+            file3 << test_ss.str();
+            file3.close();
+        }else {
+            cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+        }
         Xopt.fit_fun(ff, ud1, ud2);
         return Xopt;
     } catch (string ex_info) {
@@ -670,7 +672,8 @@ solution Newton(matrix (*ff)(matrix, matrix, matrix), matrix (*gf)(matrix, matri
             D = Xopt;
 
         }
-        std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkNewton.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+        std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-zkNewton.txt)");
+        // std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-zkNewton.txt"); //musialam dac cala sciezke bo nie dzialalo xd
         if (file3.is_open()) {
             file3 << test_ss.str();
             file3.close();

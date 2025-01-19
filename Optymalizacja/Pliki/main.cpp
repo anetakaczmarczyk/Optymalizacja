@@ -204,7 +204,7 @@ void lab1()
 	std::stringstream symulationLag_ss;	// do zapisu danych
 	symulationLag_ss << hcat(Y[0], Y[1]) << ";";
 	// zapis wynikow do pliku
-	std::ofstream file1(R"(C:\Users\Animatt\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-lagtxt)"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file1(R"(C:\Users\Ania\CLionProjects\Optymalizacja\Optymalizacja\lab1-analiza\lab1-symulation-lagtxt)"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file1.is_open()) {
 		file1 << symulationLag_ss.str();
 		file1.close();
@@ -228,11 +228,11 @@ void lab2()
 	double s = 0.1;
 	double alpha = 0.2;
 	double beta = 0.2;
-	double epsilon = 1E-18;
+	double epsilon = 1E-6;
 	int Nmax = 2000;
 	double alphaRosen = 1.2;
 
-	double tolerance = 1e-4;
+	double tolerance = 0.01;
 	solution test_opt;
 	std::stringstream test_ss;	// do zapisu danych
 
@@ -245,7 +245,6 @@ void lab2()
 	//
 	// 	for (int i = 0; i < 100; ++i)
 	// 	{
-	//
 	// 		matrix x0 = matrix(2, new double[2] {x0_dist(gen), x0_dist(gen)});
 	// 		//zapis do stringa: x1; x2 wygenerowane
 	// 		test_ss << x0(0) << ";" << x0(1) << ";";
@@ -260,27 +259,27 @@ void lab2()
 	// 		test_ss << m2d(test_opt.x(0)) << ";"<< m2d(test_opt.x(1)) << ";"<< m2d(test_opt.y) << ";" << test_opt.f_calls << ";" << (abs(m2d(test_opt.y) ) < tolerance ? "TAK" : "NIE") << ";\n";
 	// 		solution::clear_calls();
 	// 	}
-	// 	s+=1;
+	// 	s*=2;
 	// }
-
-	// zapis wynikow do pliku
-	// std::ofstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab2-analiza\\lab2-100-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	//
+	// // zapis wynikow do pliku
+	// std::ofstream file("Optymalizacja\\lab2-analiza\\lab2-100-optymalizacji.txt");
 	// if (file.is_open()) {
 	// 	file << test_ss.str();
 	// 	file.close();
 	// }else {
 	// 	cerr << "Nie udało się otworzyć pliku do zapisu.\n";
 	// }
-
+	//
 	// std::cout << "Wyniki:\n";
 	// std::cout << test_ss.str() << std::endl;
 
 	//powrót do kroku równego 0.1
 	s = 0.1;
 	//Excel - wykres
-	// matrix x0 = matrix(2, new double[2] {-0.45, 0.45});
-	// HJ(ff2T, x0,  s, alpha, epsilon, Nmax);
-	// Rosen(ff2T, x0, matrix(2, new double[2] {s, s}), alphaRosen, beta, epsilon, Nmax);
+	matrix x0 = matrix(2, new double[2] {-0.45, 0.45});
+	HJ(ff2T, x0,  s, alpha, epsilon, Nmax);
+	Rosen(ff2T, x0, matrix(2, new double[2] {s, s}), alphaRosen, beta, epsilon, Nmax);
 
   
 	// Problem rzeczywisty
@@ -433,7 +432,7 @@ void lab4()
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> x0_dist(-10.0, 10.0);
 
-
+	//
 	// double list[] = {0.05, 0.12, 0.0};
 	// // dla 3 różnych krokow: 0.05, 0.12, zmiennokrokowe
 	// for (int j = 0; j < 3; j++) {
@@ -460,7 +459,7 @@ void lab4()
 	// }
 	//
 	// // zapis wynikow do pliku
-	// std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\lab4-100-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	// std::ofstream file3(R"(C:\Users\aneta\CLionProjects\Optymalizacja\Optymalizacja\lab4-analiza\lab4-100-optymalizacji.txt)"); //musialam dac cala sciezke bo nie dzialalo xd
 	// if (file3.is_open()) {
 	// 	file3 << test_ss.str();
 	// 	file3.close();
@@ -551,10 +550,10 @@ void lab4()
 		solution::clear_calls();
 	}
 	// cout << test_nieprzyjeto.str();
-	std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\przyjeto.txt"); //musialam dac cala sciezke bo nie dzialalo xd
-	if (file3.is_open()) {
-		file3 << test_przyjeto.str();
-		file3.close();
+	std::ofstream file5("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab4-analiza\\przyjeto.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file5.is_open()) {
+		file5 << test_przyjeto.str();
+		file5.close();
 	}else {
 		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
 	}
@@ -569,7 +568,7 @@ void lab4()
 
 void lab5()
 {
-	double epsilon = 1e-4;
+	double epsilon = 1e-3;
 	int Nmax = 10000;
 	solution test_opt;
 
@@ -600,7 +599,7 @@ void lab5()
 	}
 
 	// // zapis wynikow do pliku
-	std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-101-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file3("C:\\Users\\aneta\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-101-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file3.is_open()) {
 		file3 << test_ss.str();
 		file3.close();
@@ -620,17 +619,16 @@ void lab5()
 	{
 		ud1(0) = w;
 		matrix x0 = matrix(2, new double[2] {genL(gen), genD(gen)});
-
 		test_opt = Powell(ff5R, x0, epsilon, Nmax, ud1);
 
 		test_ss << x0(0) << ";" << x0(1) << ";";
 		// zapis do stringa: l*, d*, masa*, ugiecie*, f_calls;
-		test_ss << test_opt.x(0) * 1000 << ";"<< test_opt.x(1) * 1000 << ";"<< test_opt.y(0) * 1000 << ";" << test_opt.y(1) * 1000 << ";" << test_opt.f_calls  << "\n";
+		test_ss << test_opt.x(0) * 1000 << ";"<< test_opt.x(1) * 1000 << ";"<< test_opt.y(0) << ";" << test_opt.y(1) * 1000 << ";" << test_opt.f_calls  << "\n";
 		solution::clear_calls();
 	}
 
 
-	std::ofstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-symulacja.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	std::ofstream file("C:\\Users\\aneta\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab5-analiza\\lab5-symulacja.txt"); //musialam dac cala sciezke bo nie dzialalo xd
 	if (file.is_open()) {
 		file << test_ss.str();
 		file.close();
