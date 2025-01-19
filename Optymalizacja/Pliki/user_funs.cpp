@@ -350,3 +350,45 @@ matrix ff5R(matrix x, matrix ud1, matrix ud2) {
 	return y;
 }
 
+matrix ff6T(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+	y = pow(x(0), 2) + pow(x(1), 2) - cos(2.5 * M_PI * x(0)) - cos(2.5 * M_PI * x(1)) + 2;
+	return y;
+}
+
+matrix df6(double t, matrix Y, matrix ud1, matrix ud2) {
+	matrix dY(4,1);
+	double m1 = 5;
+	double m2 = 5;
+	double k1 = 1;
+	double k2 = 1;
+
+	double b1 = ud2(0);
+	double b2 = ud2(1);
+
+	double F = 1;
+
+	dY(0) = Y(1);
+	dY(1) = (-b1 * Y(1) - b2 * (Y(1) - Y(3)) - k1 * Y(0) - k2 * (Y(0) - Y(2))) / m1;
+	dY(2) = Y(3);
+	dY(3) = (F + b2 * (Y(1) - Y(3)) + k2 * (Y(0) - Y(2))) / m2;
+
+	return dY;
+}
+
+matrix ff6R(matrix x, matrix ud1, matrix ud2) {
+	matrix y;
+	matrix Y0(4, 1);
+	matrix* Y = solve_ode(df6, 0, 0.1, 100, Y0, ud1, x[0]);
+	for (int i = 0; i < ud1(0); i++)
+	{
+		y = y + abs(ud2(i, 0) - Y[1](i, 0)) + abs(ud2(i, 1) - Y[1](i, 2));
+	}
+	y(0) = y(0) / (2 * ud1(0));
+
+
+	return y;
+}
+
+
+

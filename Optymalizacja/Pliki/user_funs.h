@@ -34,3 +34,8 @@ double sygmoid(matrix theta, matrix x);
 //lab 5
 matrix ff5T(matrix x, matrix ud1= NAN, matrix ud2= NAN);
 matrix ff5R(matrix x, matrix ud1= NAN, matrix ud2= NAN);
+
+//lab6
+matrix ff6T(matrix, matrix = NAN, matrix = NAN);
+matrix df6(double, matrix = NAN, matrix = NAN, matrix = NAN);
+matrix ff6R(matrix, matrix = NAN, matrix = NAN);
