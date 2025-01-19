@@ -23,7 +23,7 @@ int main()
 {
 	try
 	{
-		lab5();
+		lab6();
 	}
 	catch (string EX_INFO)
 	{
@@ -641,5 +641,103 @@ void lab5()
 
 void lab6()
 {
+	int N = 2;
+	int mi = 20;
+	int lambda = 40;
+	int Nmax = 1000;
+	double epsilon = 1e-5;
+
+	matrix lb(N, 1);
+	lb(0) = -5;
+	lb(1) = -5;
+
+	matrix ub(N, 1);
+	ub(0) = 5;
+	ub(1) = 5;
+
+	solution test_opt;
+
+	std::stringstream test_ss;	// do zapisu danych
+
+	double list[] = {0.01, 0.1, 1, 10, 100};
+	// początkowe wartości zakresu mutacji
+
+	for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < 100; ++i)
+		{
+			test_opt = EA(ff6T, N, lb, ub, mi, lambda, list[j], epsilon, Nmax);
+
+			test_ss << test_opt.x(0) << ";"<< test_opt.x(1) << ";"<< test_opt.y(0) << ";" << test_opt.f_calls <<";" << (solution::f_calls > Nmax ? "nie" : "tak") << ";\n";
+			solution::clear_calls();
+		}
+	}
+
+	// zapis wynikow do pliku
+	std::ofstream file3("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab6-analiza\\lab6-100-optymalizacji.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file3.is_open()) {
+		file3 << test_ss.str();
+		file3.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
+
+	// std::cout << "Wyniki:\n";
+	// std::cout << test_ss.str() << std::endl;
+
+
+	matrix x(1001,2);
+
+	std::ifstream inputFile("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\Pliki\\polozenia.txt");
+	if (!inputFile) {
+		std::cerr << "Nie można otworzyć pliku!" << std::endl;
+		return;
+	}
+	string line;
+	int i = 0;
+	while (std::getline(inputFile, line)) {
+        std::stringstream ss(line);
+        std::string fragment;
+		int j = 0;
+        while (std::getline(ss, fragment, ';')) {
+        	for (char& znak : fragment) {
+        		if (znak == ',') {
+        			znak = '.';
+        		}
+        	}
+        	x(i, j) = std::stod(fragment);
+        	j++;
+        }
+		i++;
+    }
+	inputFile.close();
+	lb = matrix(2, 1, 0.1);
+	ub = matrix(2, 1, 3);
+	std::stringstream real;
+	solution result = EA(ff6R, N, lb, ub, mi, lambda, matrix(2, 1, 1), 1e-2, Nmax, 1001, x);
+	real << result;
+
+	std::ofstream file("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab6-analiza\\lab6-solution-result.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file.is_open()) {
+		file << real.str();
+		file.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
+
+	// std::cout << "Wyniki:\n";
+	// std::cout << test_ss.str() << std::endl;
+	solution::clear_calls();
+	matrix y;
+	matrix Y0(4, 1);
+	matrix* Y = solve_ode(df6, 0, 0.1, 100, Y0, NAN, result.x[0]);
+	std::stringstream simulation;
+	simulation << Y[1];
+	std::ofstream file1("C:\\Users\\Animatt\\CLionProjects\\Optymalizacja\\Optymalizacja\\lab6-analiza\\lab6-simulation.txt"); //musialam dac cala sciezke bo nie dzialalo xd
+	if (file1.is_open()) {
+		file1 << simulation.str();
+		file1.close();
+	}else {
+		cerr << "Nie udało się otworzyć pliku do zapisu.\n";
+	}
 
 }

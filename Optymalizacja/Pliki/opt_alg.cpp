@@ -772,9 +772,93 @@ solution EA(matrix (*ff)(matrix, matrix, matrix), int N, matrix lb, matrix ub, i
             double epsilon, int Nmax, matrix ud1, matrix ud2) {
     try {
         solution Xopt;
-        //Tu wpisz kod funkcji
+        solution* P = new solution[mi+lambda];
+        solution* Pm = new solution[mi];
 
-        return Xopt;
+        for (int i=0; i<mi; i++) {
+            P[i].x = matrix(N, 2);
+            P[i].x(0,0) = (lb(1) - lb(0)) * m2d(rand_mat()) + lb(0);
+            P[i].x(0, 1) = sigma0(0);
+            P[i].x(1, 0) = (ub(1) - ub(0)) * m2d(rand_mat()) + ub(0);
+            P[i].x(1, 1) = sigma0(0);
+
+            P[i].fit_fun(ff, ud1, ud2);
+            if (P[i].y < epsilon)
+            {
+                return P[i];
+            }
+        }
+
+        matrix IFF(mi, 1);
+        double aplha = pow(N, -0.5);
+        double beta = pow(2*N, -0.25);
+        while (true) {
+            double sum = 0;
+            for (int i=0; i<mi; i++) {
+                IFF(i) = 1/P[i].y(0);
+                sum+=IFF(i);
+            }
+
+            matrix q(mi, 1);
+            q(0) = 0;
+            for (int i=1; i<mi; i++) {
+                q(i) = q(i-1) + IFF(i) / sum;
+            }
+
+
+            for (int i=0; i<lambda; i++) {
+                double r = m2d(rand_mat());
+                matrix A = P[mi - 1].x;
+                for (int j=1; j<mi; j++) {
+                    if (r > q(j-1) and r < q(j)) {
+                        A = P[j].x;
+                        break;
+                    }
+                }
+
+                r = m2d(rand_mat());
+                matrix B;
+                for (int j=1; j<mi; j++) {
+                    if (r > q(j-1) and r < q(j)) {
+                        B = P[j].x;
+                    }
+                }
+
+                r = m2d(rand_mat());
+                P[i].x = r * A + (1 - r) * B;
+
+                for (int j = 0; j < N; ++j)
+                {
+                    P[i].x(j, 1) *= exp(aplha * m2d(randn_mat()) + beta * m2d(randn_mat()));
+                    P[i].x(j, 0) += P[i].x(j, 1) * m2d(randn_mat());
+                }
+            }
+            for (int i = 0; i < mi; ++i)
+            {
+                 int j_min = 0;
+                for (int j = 1; j < mi + lambda; ++j)
+                    if (P[j_min].y > P[j].y)
+                        j_min = j;
+                Pm[i] = P[j_min];
+                P[j_min].y = 1e10;
+            }
+            for (int i = 0; i < lambda; ++i)
+            {
+                P[i].fit_fun(ff, ud1, ud2);
+                if (P[i].y < epsilon)
+                {
+
+                    P[i].flag = 1;
+                    return P[i];
+                }
+            }
+            if (solution::f_calls > Nmax) {
+                break;
+            }
+
+        }
+
+        return P[0];
     } catch (string ex_info) {
         throw ("solution EA(...):\n" + ex_info);
     }
